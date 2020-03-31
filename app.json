@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Panerus",
+    "slug": "panerus",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "description": "A simple program for authoring gamelan music.",
+    "githubUrl": "https://github.com/Narcolapser/Panerus",
+    "android": {
+      "package": "com.studiosleepygiraffe.panerus",
+      "versionCode": 1
+    }
+  }
+}
