@@ -5,12 +5,25 @@ import { StyleSheet, Text, View } from 'react-native';
 export class Note extends React.Component {
   constructor(props) {
     super(props)
+    let left = '·';
+    let right = ' ';
+    if (props.notes)
+    {
+      if (props.notes.length == 2)
+      {
+        left = props.notes[0]
+        right = props.notes[1]
+      }
+      else {
+        left = props.notes[0]
+      }
+    }
     this.state = {
       left_diacritic: '',
-      left_note: '',
-      right_note: '',
+      left_note: left,
+      right_note: right,
       right_diacritic: '',
-      notes: '·',
+      notes: '',
       menuOpen: false
     }
   }
@@ -33,9 +46,9 @@ export class Note extends React.Component {
   }
   render(){
   return (
-    <span className="dd-wrapper">
+    <span className="dd-wrapper" style={{backgroundColor: '#eee', width: '25px', float: 'left'}}>
       <span className="note-header" onClick={() => this.toggleMenu()}>
-        <span className="dd-header-title"> {this.state.notes} </span>
+        <span className="dd-header-title"><center>{this.state.left_note}{this.state.right_note}</center></span>
       </span>
       {this.state.menuOpen && <ul className="dd-list">
         <li className="dd-list-item" onClick={() => this.select_note(' ')}> </li>
@@ -51,12 +64,3 @@ export class Note extends React.Component {
     </span>
   )}
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
