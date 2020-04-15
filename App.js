@@ -13,25 +13,25 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Irama ciblon</Text>
-      <View>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
         <Gatra notes="2 3 2 7"></Gatra>
         <Gatra notes="3 2 7 6"></Gatra>
         <Gatra notes="2 3 2 76"></Gatra>
         <Gatra notes="72 35 65 3"></Gatra>
       </View>
-      <View>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
         <Gatra notes="6 7 3 2"></Gatra>
         <Gatra notes="6 3 2 7"></Gatra>
         <Gatra notes="3 5 3 2"></Gatra>
         <Gatra notes="5 3 2 7"></Gatra>
       </View>
-      <View>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
         <Gatra notes="6 7 3 2"></Gatra>
         <Gatra notes="6 3 2 7"></Gatra>
         <Gatra notes="3 5 3 2"></Gatra>
         <Gatra notes="· 7 5 6"></Gatra>
       </View>
-      <View>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
         <Gatra notes="5 3 5 3"></Gatra>
         <Gatra notes="7 6 2 7"></Gatra>
         <Gatra notes="3 5 3 2"></Gatra>
