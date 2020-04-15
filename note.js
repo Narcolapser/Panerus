@@ -46,21 +46,10 @@ export class Note extends React.Component {
   }
   render(){
   return (
-    <span className="dd-wrapper" style={{backgroundColor: '#eee', width: '25px', float: 'left'}}>
-      <span className="note-header" onClick={() => this.toggleMenu()}>
-        <span className="dd-header-title"><center>{this.state.left_note}{this.state.right_note}</center></span>
-      </span>
-      {this.state.menuOpen && <ul className="dd-list">
-        <li className="dd-list-item" onClick={() => this.select_note(' ')}> </li>
-        <li className="dd-list-item" onClick={() => this.select_note('·')}>·</li>
-        <li className="dd-list-item" onClick={() => this.select_note('1')}>1</li>
-        <li className="dd-list-item" onClick={() => this.select_note('2')}>2</li>
-        <li className="dd-list-item" onClick={() => this.select_note('3')}>3</li>
-        <li className="dd-list-item" onClick={() => this.select_note('4')}>4</li>
-        <li className="dd-list-item" onClick={() => this.select_note('5')}>5</li>
-        <li className="dd-list-item" onClick={() => this.select_note('6')}>6</li>
-        <li className="dd-list-item" onClick={() => this.select_note('7')}>7</li>
-      </ul>}
-    </span>
+    <View className="dd-wrapper" style={{backgroundColor: '#eee', float: 'left'}}>
+      <View className="note-header" onClick={() => this.toggleMenu()}>
+        <View className="dd-header-title"><Text>{this.state.left_note}{this.state.right_note}</Text></View>
+      </View>
+    </View>
   )}
 }
