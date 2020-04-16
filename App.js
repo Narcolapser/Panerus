@@ -1,56 +1,114 @@
-import React from 'react';
-//import * as RNFS from 'react-native-fs';
-import { StyleSheet, Text, View } from 'react-native';
-import { Gatra } from './gatra.js';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
 
-export default function App() {
-  let lines = [];
-  // RNFS.readFile('irama_ciblon.pan','ascii').then(res => {
-  //   console.log(res);
-  // }).catch(err => {
-  //   console.log(err.message, err.code);
-  // })
+import React from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
+
+import {
+  Header,
+  LearnMoreLinks,
+  Colors,
+  DebugInstructions,
+  ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
+
+const App: () => React$Node = () => {
   return (
-    <View style={styles.container}>
-      <Text>Irama ciblon</Text>
-      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-        <Gatra notes="2 3 2 7"></Gatra>
-        <Gatra notes="3 2 7 6"></Gatra>
-        <Gatra notes="2 3 2 76"></Gatra>
-        <Gatra notes="72 35 65 3"></Gatra>
-      </View>
-      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-        <Gatra notes="6 7 3 2"></Gatra>
-        <Gatra notes="6 3 2 7"></Gatra>
-        <Gatra notes="3 5 3 2"></Gatra>
-        <Gatra notes="5 3 2 7"></Gatra>
-      </View>
-      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-        <Gatra notes="6 7 3 2"></Gatra>
-        <Gatra notes="6 3 2 7"></Gatra>
-        <Gatra notes="3 5 3 2"></Gatra>
-        <Gatra notes="· 7 5 6"></Gatra>
-      </View>
-      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-        <Gatra notes="5 3 5 3"></Gatra>
-        <Gatra notes="7 6 2 7"></Gatra>
-        <Gatra notes="3 5 3 2"></Gatra>
-        <Gatra notes="· 7 5 6"></Gatra>
-      </View>
-    </View>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
+          <Header />
+          {global.HermesInternal == null ? null : (
+            <View style={styles.engine}>
+              <Text style={styles.footer}>Engine: Hermes</Text>
+            </View>
+          )}
+          <View style={styles.body}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Step One</Text>
+              <Text style={styles.sectionDescription}>
+                Edit <Text style={styles.highlight}>App.js</Text> to change this
+                screen and then come back to see your edits.
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>See Your Changes</Text>
+              <Text style={styles.sectionDescription}>
+                <ReloadInstructions />
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Debug</Text>
+              <Text style={styles.sectionDescription}>
+                <DebugInstructions />
+              </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Learn More</Text>
+              <Text style={styles.sectionDescription}>
+                Read the docs to discover what to do next:
+              </Text>
+            </View>
+            <LearnMoreLinks />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  scrollView: {
+    backgroundColor: Colors.lighter,
   },
-  gatra: {
-    flex: 1,
-    backgroundColor: '#ccc',
-    margin: '10px'
-  }
+  engine: {
+    position: 'absolute',
+    right: 0,
+  },
+  body: {
+    backgroundColor: Colors.white,
+  },
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: Colors.dark,
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+  footer: {
+    color: Colors.dark,
+    fontSize: 12,
+    fontWeight: '600',
+    padding: 4,
+    paddingRight: 12,
+    textAlign: 'right',
+  },
 });
+
+export default App;
