@@ -57,3 +57,14 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# misc:
+.buckconfig
+.eslintrc.js
+.expo-shared/
+.expo/
+.flowconfig
+.gitattributes
+.prettierrc.js
+.watchmanconfig
+
