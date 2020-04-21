@@ -1,5 +1,5 @@
 import React from 'react';
-//import * as RNFS from 'react-native-fs';
+import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View } from 'react-native';
 import { Gatra } from './gatra.js';
 
@@ -10,8 +10,14 @@ export default function App() {
   // }).catch(err => {
   //   console.log(err.message, err.code);
   // })
+  var RNFS = require('react-native-fs');
+  let results = RNFS.DocumentDirectoryPath;
+  results = RNFS.readDir(RNFS.DocumentDirectoryPath).then((result) =>{return result});
+  console.log(results);
+
   return (
     <View style={styles.root}>
+      <Text>{JSON.stringify(results)}</Text>
       <Text>Irama ciblon5</Text>
       <View style={styles.container}>
         <View style={styles.gatra}>
@@ -48,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',    
+    justifyContent: 'center',
   },
   container: {
     flex: 1,
