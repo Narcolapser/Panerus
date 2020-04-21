@@ -1,52 +1,54 @@
 import React from 'react';
 import * as RNFS from 'react-native-fs';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { Gatra } from './gatra.js';
 
-export default function App() {
-  let lines = [];
-  // RNFS.readFile('irama_ciblon.pan','ascii').then(res => {
-  //   console.log(res);
-  // }).catch(err => {
-  //   console.log(err.message, err.code);
-  // })
-  var RNFS = require('react-native-fs');
-  let results = RNFS.DocumentDirectoryPath;
-  results = RNFS.readDir(RNFS.DocumentDirectoryPath).then((result) =>{return result});
-  console.log(results);
+export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    let content = '2 3 2 7	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
+    let lines = content.split('\n')
+    this.state = {
+      results:'results',
+      lines:lines
+    }
+    var RNFS = require('react-native-fs');
+    let results = RNFS.DocumentDirectoryPath;
+    results = RNFS.readDir(RNFS.DocumentDirectoryPath)
+      .then((result) => {
+        this.setState({results:result[0]['path']})
+      });
 
-  return (
-    <View style={styles.root}>
-      <Text>{JSON.stringify(results)}</Text>
-      <Text>Irama ciblon5</Text>
-      <View style={styles.container}>
-        <View style={styles.gatra}>
-          <Gatra notes="2 3 2 7"></Gatra>
-          <Gatra notes="3 2 7 6"></Gatra>
-          <Gatra notes="2 3 2 76"></Gatra>
-          <Gatra notes="72 35 65 3"></Gatra>
+  }
+
+  save (){
+    console.log('Saving')
+
+  }
+
+  render() {
+    let lines = [];
+    for(let i = 0; i < this.state.lines.length; i++)
+    {
+      let gatra = this.state.lines[i].split('\t');
+      lines.push(<View style={styles.gatra} key={i}>
+          <Gatra notes={gatra[0]} key="g0"></Gatra>
+          <Gatra notes={gatra[1]} key="g1"></Gatra>
+          <Gatra notes={gatra[2]} key="g2"></Gatra>
+          <Gatra notes={gatra[3]} key="g3"></Gatra>
+      </View>)
+    }
+    return (
+      <View style={styles.root}>
+        <Text>{this.state.results}</Text>
+        <Text>Irama ciblon6</Text>
+        <View style={styles.container}>
+          { lines }
         </View>
-        <View style={styles.gatra}>
-          <Gatra notes="6 7 3 2"></Gatra>
-          <Gatra notes="6 3 2 7"></Gatra>
-          <Gatra notes="3 5 3 2"></Gatra>
-          <Gatra notes="5 3 2 7"></Gatra>
-        </View>
-        <View style={styles.gatra}>
-          <Gatra notes="6 7 3 2"></Gatra>
-          <Gatra notes="6 3 2 7"></Gatra>
-          <Gatra notes="3 5 3 2"></Gatra>
-          <Gatra notes="· 7 5 6"></Gatra>
-        </View>
-        <View style={styles.gatra}>
-          <Gatra notes="5 3 5 3"></Gatra>
-          <Gatra notes="7 6 2 7"></Gatra>
-          <Gatra notes="3 5 3 2"></Gatra>
-          <Gatra notes="· 7 5 6"></Gatra>
-        </View>
+        <Button onPress={this.save} title="save to file"/>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
