@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export class Note extends React.Component {
   constructor(props) {
     super(props)
-    let left = '·';
+    let left = '2';
     let right = ' ';
     if (props.notes)
     {
