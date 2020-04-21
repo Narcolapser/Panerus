@@ -3,27 +3,54 @@ import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { Gatra } from './gatra.js';
 
+
+
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    let content = '2 3 2 7	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
+    let content = '1 1 1 1	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
     let lines = content.split('\n')
     this.state = {
       results:'results',
       lines:lines
     }
-    var RNFS = require('react-native-fs');
+    let RNFS = require('react-native-fs');
+    let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pan';
+    //let content = '2 3 2 7	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
+    RNFS.readFile(path, 'utf8')
+      .then((contents) => {
+        let lines = content.split('\n')
+        this.setState({lines:lines});
+        })
+      .catch((err) => {
+        console.log(err.message, err.code);
+        })
+
     let results = RNFS.DocumentDirectoryPath;
     results = RNFS.readDir(RNFS.DocumentDirectoryPath)
       .then((result) => {
-        this.setState({results:result[0]['path']})
+        let files = []
+        for(let i = 0; i < result.length; i++)
+          files.push(result[i]['path']);
+        this.setState({results:JSON.stringify(files)})
       });
 
   }
 
-  save (){
-    console.log('Saving')
-
+  save (self){
+    console.log('Saving');
+    console.log(self);
+    let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pan';
+    let content = "";
+    for(let i = 0; i < this.state.lines; i++)
+      content += this.state.lines[i] + '\n';
+    RNFS.writeFile(path, content)
+      .then((success) => {
+        console.log('Succesfully wrote irama!');
+      })
+      .catch((err) =>{
+        console.log('err.message');
+      });
   }
 
   render() {
@@ -45,7 +72,7 @@ export default class App extends React.Component {
         <View style={styles.container}>
           { lines }
         </View>
-        <Button onPress={this.save} title="save to file"/>
+        <Button onPress={this.save(this)} title="save to file"/>
       </View>
     );
   }
