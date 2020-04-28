@@ -1,10 +1,32 @@
 import React from 'react';
 import * as RNFS from 'react-native-fs';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, PermissionsAndroid} from 'react-native';
 import { Gatra } from './gatra.js';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
+const requestExternalWrite = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: "Access to your files is needed to save the PDF",
+        message:
+          "In order to save the pdf write access to your files and documents is needed.",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can write externally");
+    } else {
+      console.log("write permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
 
 export default class App extends React.Component {
   constructor(props) {
@@ -58,13 +80,29 @@ export default class App extends React.Component {
     let options = {
       html: '<h1>PDF TEST</h1>',
       fileName: 'test',
-      directory: 'Documents',
+      directory: 'Documents'
     };
     console.log('creating pdf');
-    let file = await RNHTMLtoPDF.convert(options)
-    // console.log(file.filePath);
+    let file = await RNHTMLtoPDF.convert(options).
+    catch(err => {
+      console.error(err);
+      return `Error: ${err}`;
+    });
     console.log(file.filePath);
-    alert(file.filePath);
+    // console.log(file);
+    //let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pdf';
+
+
+
+
+//    let path = '/storage/emulated/0/Download/irama_ciblon.pdf';
+//    RNFS.writeFile(path, file['base64'], 'base64')
+//      .then((success) => {
+//        console.log('Succesfully wrote irama!');
+//      })
+//      .catch((err) =>{
+//        console.log(err.message);
+//      });
   }
 
   render() {
@@ -87,7 +125,8 @@ export default class App extends React.Component {
           { lines }
         </View>
         <Button onPress={this.save(this)} title="save to file"/>
-        <Button onPress={this.create_pdf()} title="save to pdf"/>
+        <Button onPress={this.create_pdf} title="save to pdf"/>
+        <Button onPress={requestExternalWrite} title="request permissions" />
       </View>
     );
   }
