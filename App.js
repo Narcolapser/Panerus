@@ -3,6 +3,7 @@ import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { Gatra } from './gatra.js';
 
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 
 export default class App extends React.Component {
@@ -53,6 +54,19 @@ export default class App extends React.Component {
       });
   }
 
+  async create_pdf(){
+    let options = {
+      html: '<h1>PDF TEST</h1>',
+      fileName: 'test',
+      directory: 'Documents',
+    };
+    console.log('creating pdf');
+    let file = await RNHTMLtoPDF.convert(options)
+    // console.log(file.filePath);
+    console.log(file.filePath);
+    alert(file.filePath);
+  }
+
   render() {
     let lines = [];
     for(let i = 0; i < this.state.lines.length; i++)
@@ -73,6 +87,7 @@ export default class App extends React.Component {
           { lines }
         </View>
         <Button onPress={this.save(this)} title="save to file"/>
+        <Button onPress={this.create_pdf()} title="save to pdf"/>
       </View>
     );
   }
