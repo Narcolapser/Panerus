@@ -62,7 +62,6 @@ export default class App extends React.Component {
 
   save (self){
     console.log('Saving');
-    console.log(self);
     let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pan';
     let content = "";
     for(let i = 0; i < this.state.lines; i++)
@@ -88,7 +87,6 @@ export default class App extends React.Component {
       console.error(err);
       return `Error: ${err}`;
     });
-    console.log(file.filePath);
     // console.log(file);
     //let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pdf';
 
@@ -119,7 +117,6 @@ export default class App extends React.Component {
     }
     return (
       <View style={styles.root}>
-        <Text>{this.state.results}</Text>
         <Text>Irama ciblon6</Text>
         <View style={styles.container}>
           { lines }
