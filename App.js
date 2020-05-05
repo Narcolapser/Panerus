@@ -63,7 +63,7 @@ export default class App extends React.Component {
   save (){
     console.log('Saving');
     let path = RNFS.DownloadDirectoryPath + '/irama_ciblon.pan';
-    let content = JSON.stringify(this.state);
+    let content = '';
     for(let i = 0; i < this.state.lines.length; i++)
       content += this.state.lines[i] + '\n';
 
