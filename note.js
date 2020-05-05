@@ -43,16 +43,13 @@ export class Note extends React.Component {
   }
   change_note(side, value){
     if (side == 'left')
-    {
-      this.setState({left_note:value});
-      this.props.onChange(this.state.left_note+this.state.right_note);
-    }
+      if (this.props.notes.length == 1)
+        this.props.onChange(value);
+      else
+        this.props.onChange(value + this.props.notes[1]);
     else
-    {
-      this.setState({right_note:value});
-    }
+      this.props.onChange(this.props.notes[0] + value);
     console.log('Note changed: ' + value + ' : ' + side);
-    this.props.onChange(this.state.left_note+this.state.right_note);
   }
   select_note(val){
     this.setState({
@@ -83,7 +80,7 @@ export class Note extends React.Component {
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text >{this.state.left_note}{this.state.right_note}</Text>
+              <Text >{this.props.notes}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={this.toggle_menu} style={styles.button}/>

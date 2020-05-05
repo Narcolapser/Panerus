@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button, PermissionsAndroid} from 'react-native';
-import { Gatra } from './gatra.js';
+import { Line } from './line.js';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
@@ -105,17 +105,26 @@ export default class App extends React.Component {
 //      });
   }
 
+  update_line(line, value)
+  {
+    console.log('App level: Updating line ' + line + ' to ' + value);
+    let lines = this.state.lines;
+    console.log(lines);
+    lines[line] = value;
+    console.log('Lines are now:');
+    console.log(lines);
+    this.setState({lines:lines});
+  }
   render() {
     let lines = [];
     for(let i = 0; i < this.state.lines.length; i++)
     {
-      let gatra = this.state.lines[i].split('\t');
-      lines.push(<View style={styles.gatra} key={i}>
-          <Gatra notes={gatra[0]} key="g0"></Gatra>
-          <Gatra notes={gatra[1]} key="g1"></Gatra>
-          <Gatra notes={gatra[2]} key="g2"></Gatra>
-          <Gatra notes={gatra[3]} key="g3"></Gatra>
-      </View>)
+      lines.push
+      (
+        <View style={styles.gatra} key={i}>
+          <Line gatras={this.state.lines[i]} onChange={(value) => this.update_line(i,value)}></Line>
+        </View>
+      );
     }
     return (
       <View style={styles.root}>

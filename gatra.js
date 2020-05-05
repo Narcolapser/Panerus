@@ -5,24 +5,24 @@ import { Note } from './note.js';
 export class Gatra extends React.Component {
   constructor(props) {
     super(props)
-    let notes = props.notes.split(' ')
-    this.state = {
-      notes:notes
-    }
-
   }
 
   update_note(note, value)
   {
     console.log('Updating the ' + note + ' to ' + value);
+    let gatra = this.props.notes.split(' ');
+    gatra[note] = value;
+    console.log('Updating gatra to: ' + gatra.join(' '));
+    this.props.onChange(gatra.join(' '));
   }
   render(){
+  let notes = this.props.notes.split(' ')
   return (
     <View className="dd-wrapper" style={{backgroundColor: '#eee', minWidth: 25, float: 'left'}}>
-      <Note notes={this.state.notes[0]} onChange={(value) => this.update_note(0,value)}></Note>
-      <Note notes={this.state.notes[1]} onChange={(value) => this.update_note(1,value)}></Note>
-      <Note notes={this.state.notes[2]} onChange={(value) => this.update_note(2,value)}></Note>
-      <Note notes={this.state.notes[3]} onChange={(value) => this.update_note(3,value)}></Note>
+      <Note notes={notes[0]} onChange={(value) => this.update_note(0,value)}></Note>
+      <Note notes={notes[1]} onChange={(value) => this.update_note(1,value)}></Note>
+      <Note notes={notes[2]} onChange={(value) => this.update_note(2,value)}></Note>
+      <Note notes={notes[3]} onChange={(value) => this.update_note(3,value)}></Note>
     </View>
   )}
 }
