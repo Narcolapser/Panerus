@@ -29,16 +29,30 @@ export class Note extends React.Component {
       modalVisible: false
     }
 
-    this.toggleMenu = this.toggleMenu.bind(this)
+    this.toggle_menu = this.toggle_menu.bind(this);
+
   }
   handleClickOutside(){
     this.setState({
       menuOpen: false
     })
   }
-  toggleMenu(){
+  toggle_menu(){
     console.log('note pressed');
     this.setState({modalVisible: !this.state.modalVisible});
+  }
+  change_note(side, value){
+    if (side == 'left')
+    {
+      this.setState({left_note:value});
+      this.props.onChange(this.state.left_note+this.state.right_note);
+    }
+    else
+    {
+      this.setState({right_note:value});
+    }
+    console.log('Note changed: ' + value + ' : ' + side);
+    this.props.onChange(this.state.left_note+this.state.right_note);
   }
   select_note(val){
     this.setState({
@@ -57,40 +71,39 @@ export class Note extends React.Component {
       >
         <View style={styles.container}>
           <View id="left_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button}/>
-            <Button title="1" style={styles.button}/>
-            <Button title="2" style={styles.button}/>
-            <Button title="3" style={styles.button}/>
-            <Button title="4" style={styles.button}/>
-            <Button title="5" style={styles.button}/>
-            <Button title="6" style={styles.button}/>
-            <Button title="7" style={styles.button}/>
-            <Button title="·" style={styles.button}/>
+            <Button title="␣" style={styles.button} onPress={() => this.change_note('left',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => this.change_note('left','1')}/>
+            <Button title="2" style={styles.button} onPress={() => this.change_note('left','2')}/>
+            <Button title="3" style={styles.button} onPress={() => this.change_note('left','3')}/>
+            <Button title="4" style={styles.button} onPress={() => this.change_note('left','4')}/>
+            <Button title="5" style={styles.button} onPress={() => this.change_note('left','5')}/>
+            <Button title="6" style={styles.button} onPress={() => this.change_note('left','6')}/>
+            <Button title="7" style={styles.button} onPress={() => this.change_note('left','7')}/>
+            <Button title="·" style={styles.button} onPress={() => this.change_note('left','·')}/>
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text >{this.state.left_note}</Text>
-              <Text >{this.state.right_note}</Text>
+              <Text >{this.state.left_note}{this.state.right_note}</Text>
             </View>
             <View id="note_display" >
-              <Button title="Done" onPress={this.toggleMenu} style={styles.button}/>
+              <Button title="Done" onPress={this.toggle_menu} style={styles.button}/>
             </View>
           </View>
           <View id="right_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button}/>
-            <Button title="1" style={styles.button}/>
-            <Button title="2" style={styles.button}/>
-            <Button title="3" style={styles.button}/>
-            <Button title="4" style={styles.button}/>
-            <Button title="5" style={styles.button}/>
-            <Button title="6" style={styles.button}/>
-            <Button title="7" style={styles.button}/>
-            <Button title="·" style={styles.button}/>
+            <Button title="␣" style={styles.button} onPress={() => this.change_note('right',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => this.change_note('right','1')}/>
+            <Button title="2" style={styles.button} onPress={() => this.change_note('right','2')}/>
+            <Button title="3" style={styles.button} onPress={() => this.change_note('right','3')}/>
+            <Button title="4" style={styles.button} onPress={() => this.change_note('right','4')}/>
+            <Button title="5" style={styles.button} onPress={() => this.change_note('right','5')}/>
+            <Button title="6" style={styles.button} onPress={() => this.change_note('right','6')}/>
+            <Button title="7" style={styles.button} onPress={() => this.change_note('right','7')}/>
+            <Button title="·" style={styles.button} onPress={() => this.change_note('right','·')}/>
           </View>
         </View>
       </Modal>
-      <TouchableNativeFeedback onPress={this.toggleMenu}>
-        <View className="dd-header-title"><Text>{this.state.left_note}{this.state.right_note}</Text></View>
+      <TouchableNativeFeedback onPress={this.toggle_menu}>
+        <View className="dd-header-title"><Text>{this.props.notes}</Text></View>
       </TouchableNativeFeedback>
     </View>
   )}

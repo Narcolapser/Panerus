@@ -60,12 +60,14 @@ export default class App extends React.Component {
 
   }
 
-  save (self){
+  save (){
     console.log('Saving');
-    let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pan';
-    let content = "";
-    for(let i = 0; i < this.state.lines; i++)
+    let path = RNFS.DownloadDirectoryPath + '/irama_ciblon.pan';
+    let content = JSON.stringify(this.state);
+    for(let i = 0; i < this.state.lines.length; i++)
       content += this.state.lines[i] + '\n';
+
+    console.log(content);
     RNFS.writeFile(path, content)
       .then((success) => {
         console.log('Succesfully wrote irama!');
@@ -117,11 +119,11 @@ export default class App extends React.Component {
     }
     return (
       <View style={styles.root}>
-        <Text>Irama ciblon6</Text>
+        <Text>Irama ciblon8</Text>
         <View style={styles.container}>
           { lines }
         </View>
-        <Button onPress={this.save(this)} title="save to file"/>
+        <Button onPress={() => this.save()} title="save to file"/>
         <Button onPress={this.create_pdf} title="save to pdf"/>
         <Button onPress={requestExternalWrite} title="request permissions" />
       </View>

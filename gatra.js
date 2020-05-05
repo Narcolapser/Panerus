@@ -9,14 +9,20 @@ export class Gatra extends React.Component {
     this.state = {
       notes:notes
     }
+
+  }
+
+  update_note(note, value)
+  {
+    console.log('Updating the ' + note + ' to ' + value);
   }
   render(){
   return (
     <View className="dd-wrapper" style={{backgroundColor: '#eee', minWidth: 25, float: 'left'}}>
-      <Note notes={this.state.notes[0]}></Note>
-      <Note notes={this.state.notes[1]}></Note>
-      <Note notes={this.state.notes[2]}></Note>
-      <Note notes={this.state.notes[3]}></Note>
+      <Note notes={this.state.notes[0]} onChange={(value) => this.update_note(0,value)}></Note>
+      <Note notes={this.state.notes[1]} onChange={(value) => this.update_note(1,value)}></Note>
+      <Note notes={this.state.notes[2]} onChange={(value) => this.update_note(2,value)}></Note>
+      <Note notes={this.state.notes[3]} onChange={(value) => this.update_note(3,value)}></Note>
     </View>
   )}
 }
