@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button, PermissionsAndroid} from 'react-native';
-import { Line } from './line.js';
+import { Editor } from './editor.js';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
@@ -105,34 +105,11 @@ export default class App extends React.Component {
 //        console.log(err.message);
 //      });
   }
-
-  update_line(line, value)
-  {
-    console.log('App level: Updating line ' + line + ' to ' + value);
-    let lines = this.state.lines;
-    console.log(lines);
-    lines[line] = value;
-    console.log('Lines are now:');
-    console.log(lines);
-    this.setState({lines:lines});
-  }
   render() {
-    let lines = [];
-    for(let i = 0; i < this.state.lines.length; i++)
-    {
-      lines.push
-      (
-        <View style={styles.gatra} key={i}>
-          <Line gatras={this.state.lines[i]} onChange={(value) => this.update_line(i,value)}></Line>
-        </View>
-      );
-    }
     return (
       <View style={styles.root}>
-        <Text>Irama ciblon8</Text>
-        <View style={styles.container}>
-          { lines }
-        </View>
+        <Text>Irama ciblon9</Text>
+        <Editor lines={this.state.lines}></Editor>
         <Button onPress={() => this.save()} title="save to file"/>
         <Button onPress={this.create_pdf} title="save to pdf"/>
         <Button onPress={requestExternalWrite} title="request permissions" />
