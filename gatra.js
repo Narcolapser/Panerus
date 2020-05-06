@@ -18,11 +18,11 @@ export class Gatra extends React.Component {
   render(){
   let notes = this.props.notes.split(' ')
   return (
-    <View className="dd-wrapper" style={{backgroundColor: '#eee', minWidth: 25, float: 'left'}}>
-      <Note notes={notes[0]} onChange={(value) => this.update_note(0,value)}></Note>
-      <Note notes={notes[1]} onChange={(value) => this.update_note(1,value)}></Note>
-      <Note notes={notes[2]} onChange={(value) => this.update_note(2,value)}></Note>
-      <Note notes={notes[3]} onChange={(value) => this.update_note(3,value)}></Note>
+    <View className="dd-wrapper" style={{backgroundColor: '#eee', minWidth: 100, float: 'left', flexDirection: 'row'}}>
+      <Note style={{flex: 1}} notes={notes[0]} onChange={(value) => this.update_note(0,value)}></Note>
+      <Note style={{flex: 1}} notes={notes[1]} onChange={(value) => this.update_note(1,value)}></Note>
+      <Note style={{flex: 1}} notes={notes[2]} onChange={(value) => this.update_note(2,value)}></Note>
+      <Note style={{flex: 1}} notes={notes[3]} onChange={(value) => this.update_note(3,value)}></Note>
     </View>
   )}
 }

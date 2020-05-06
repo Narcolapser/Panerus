@@ -31,7 +31,8 @@ const requestExternalWrite = async () => {
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    let content = '1 1 1 1	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
+    let content = '1 1 1 1\t3 2 7 6\t2 3 2 76\t72 35 65 3\n6 7 3 2\t6 3 2 7\t3 5 3 2\t5 3 2 7\n6 7 3 2\t6 3 2 7\t3 5 3 2\t· 7 5 6\n5 3 5 3\t7 6 2 7\t3 5 3 2\t· 7 5 6';
+    //let content = '0a 1a 2a 3a\t0b 1b 2b 3b\t0c 1c 2c 3c\t0d 1d 2d 3d\n0e 1e 2e 3e\t0f 1f 2f 3f\t0g 1g 2g 3g\t0h 1h 2h 3h\n0i 1i 2i 3i\t0j 1j 2j 3j\t0k 1k 2k 3k\t0l 1l 2l 3l\n0m 1m 2m 3m\t0n 1n 2n 3n\t0o 1o 2o 3o\t0p 1p 2p 3p'
     let lines = content.split('\n')
     this.state = {
       results:'results',
@@ -39,7 +40,7 @@ export default class App extends React.Component {
     }
     let RNFS = require('react-native-fs');
     let path = RNFS.DocumentDirectoryPath + '/irama_ciblon.pan';
-    //let content = '2 3 2 7	3 2 7 6	2 3 2 76	72 35 65 3\n6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7\n6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6\n5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6';
+    //let content = '2 3 2 7\t3 2 7 6\t2 3 2 76\t72 35 65 3\n6 7 3 2\t6 3 2 7\t3 5 3 2\t5 3 2 7\n6 7 3 2\t6 3 2 7\t3 5 3 2\t· 7 5 6\n5 3 5 3\t7 6 2 7\t3 5 3 2\t· 7 5 6';
     RNFS.readFile(path, 'utf8')
       .then((contents) => {
         let lines = content.split('\n')
