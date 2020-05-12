@@ -2,8 +2,8 @@ import React from 'react';
 import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button, PermissionsAndroid} from 'react-native';
 import { Editor } from './editor.js';
-
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import HomeScreen from './screens/homescreen.js';
 
 const requestExternalWrite = async () => {
   try {
@@ -107,13 +107,15 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <View style={styles.root}>
-        <Text>Irama ciblon9</Text>
-        <Editor lines={this.state.lines}></Editor>
-        <Button onPress={() => this.save()} title="save to file"/>
-        <Button onPress={this.create_pdf} title="save to pdf"/>
-        <Button onPress={requestExternalWrite} title="request permissions" />
-      </View>
+      <HomeScreen>
+        <View style={styles.root}>
+          <Text>Irama ciblon9</Text>
+          <Editor lines={this.state.lines}></Editor>
+          <Button onPress={() => this.save()} title="save to file"/>
+          <Button onPress={this.create_pdf} title="save to pdf"/>
+          <Button onPress={requestExternalWrite} title="request permissions" />
+        </View>
+      </HomeScreen>
     );
   }
 }
