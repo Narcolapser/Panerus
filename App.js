@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, PermissionsAndroid, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, PermissionsAndroid, ScrollView, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,9 +7,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function Document(props){
   return (
-    <View style={styles.document} key={props.name}>
+    <TouchableOpacity style={styles.document} key={props.name}
+      onPress={() => props.navigation.navigate('Song',{name:props.name, path:props.path})}>
       <Text>{props.name}</Text>
-    </View>
+    </TouchableOpacity>
     )
 }
 
@@ -17,30 +18,30 @@ function HomeScreen({ navigation }) {
   let docs = [];
   //<Icon name="plus-circle-outline"/>
   let plus_icon = <Icon name="plus-circle-outline"/>;
-  docs.push(Document({"name":plus_icon}));
+  docs.push(Document({name:plus_icon,navigation:navigation,path:false}));
 
   for(let i = 0; i < 10; i++)
-    docs.push(Document({"name":i}))
+    docs.push(Document({name:i,navigation:navigation,path:i}))
 
   return (
     <View style={styles.root}>
-      <View style={styles.side_bar}><Text>Left</Text></View>
+      <View style={styles.side_bar}></View>
       <View style={styles.middle}>
         <ScrollView style={styles.document_scroll}>
-          <Text>Top2</Text>
           { docs }
-          <Text>Bottom</Text>
         </ScrollView>
       </View>
-      <View style={styles.side_bar}><Text>Right</Text></View>
+      <View style={styles.side_bar}></View>
     </View>
   );
 }
 
-function SongScreen() {
+function SongScreen({route, navigation}) {
+  const { path } = route.params;
+  console.log(route.params);
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Song Screen</Text>
+      <Text>Song Screen: { path }</Text>
     </View>
   );
 }
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   document_scroll: {
-    backgroundColor: 'pink',
     width: "100%",
   }
 });
