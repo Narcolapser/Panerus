@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
+import * as RNFS from 'react-native-fs';
 import { StyleSheet, Text, View, Button, PermissionsAndroid, ScrollView, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,13 +16,33 @@ function Document(props){
 }
 
 function HomeScreen({ navigation }) {
+  const [doc_list, set_doc_list] = useState([]);
+
+  useEffect( () => {
+    let RNFS = require('react-native-fs');
+    results = RNFS.readDir(RNFS.DocumentDirectoryPath)
+    .then((result) => {
+      let files = []
+      for(let i = 0; i < result.length; i++)
+      {
+        console.log(result[i]['path'].slice(-3));
+        console.log(!(result[i]['path'].slice(-3) == 'pan'));
+        if ((result[i]['path'].slice(-3) == 'pan'))
+          files.push(result[i]['path']);
+      }
+      console.log(JSON.stringify(files));
+      set_doc_list(files);
+    });
+
+    }, [])
+
   let docs = [];
   //<Icon name="plus-circle-outline"/>
   let plus_icon = <Icon name="plus-circle-outline"/>;
   docs.push(Document({name:plus_icon,navigation:navigation,path:false}));
 
-  for(let i = 0; i < 10; i++)
-    docs.push(Document({name:i,navigation:navigation,path:i}))
+  for(let i = 0; i < doc_list.length; i++)
+    docs.push(Document({name:doc_list[i],navigation:navigation,path:doc_list[i]}))
 
   return (
     <View style={styles.root}>
