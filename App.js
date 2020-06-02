@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Button, PermissionsAndroid, ScrollView, Touchab
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-//import {SongScreen} from 'screens/song.js';
+import { SongScreen } from './song.js';
 
 function Document(props){
   return (
@@ -25,8 +25,6 @@ function HomeScreen({ navigation }) {
       let files = []
       for(let i = 0; i < result.length; i++)
       {
-        console.log(result[i]['path'].slice(-3));
-        console.log(!(result[i]['path'].slice(-3) == 'pan'));
         if ((result[i]['path'].slice(-3) == 'pan'))
           files.push(result[i]['path']);
       }
@@ -53,16 +51,6 @@ function HomeScreen({ navigation }) {
         </ScrollView>
       </View>
       <View style={styles.side_bar}></View>
-    </View>
-  );
-}
-
-function SongScreen({route, navigation}) {
-  const { path } = route.params;
-  console.log(route.params);
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Song Screen: { path }</Text>
     </View>
   );
 }
