@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet } from 'react-native';
+import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollView } from 'react-native';
 import * as RNFS from 'react-native-fs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 var example = `# Asmaradana
 
@@ -20,11 +21,9 @@ var example = `# Asmaradana
 function parse_song(str)
 {
   let parts = str.split('##');
-  console.log(parts[0]);
   let title = parts.splice(0,1)[0].substring(2);
   while(title.includes('\n'))
     title = title.replace('\n','');
-  console.log(title);
   let passages = [];
   for(let i = 0; i < parts.length; i++)
   {
@@ -75,20 +74,31 @@ export function SongScreen({route, navigation}) {
     )
   }
 
+  let addPassage = () => {
+    let new_content = JSON.parse(JSON.stringify(content));
+    console.log(new_content);
+    new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:['1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4']}]});
+    console.log(new_content);
+    console.log("Saving now");
+    setContent(new_content);
+    console.log("Done");
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View>
-        <Text>Title: { content['title'] }</Text>
+    <ScrollView>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          <Text>Title: { content['title'] }</Text>
+        </View>
+        {passages}
       </View>
-      {passages}
-    </View>
+      <Button title="Add passage" onPress={addPassage}><Icon name="plus-circle-outline"/></Button>
+    </ScrollView>
   );
 }
 
 function Passage(props){
   let str_lines = props.content.lines;
-  console.log('Lines:');
-  console.log(props.content.lines);
   let lines = [];
   let onChange = (line, value) => {
       console.log('Updating the line ' + line + ' line to ' + value);
