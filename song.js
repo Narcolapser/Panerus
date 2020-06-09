@@ -51,7 +51,6 @@ function parse_song(str)
     instruments.push({instrument:instrument,lines:lines});
     passages.push({title: passage_title, instruments:instruments});
   }
-  console.log({passages:passages,title:title});
   return {passages:passages,title:title};
 }
 
@@ -59,19 +58,20 @@ export function SongScreen({route, navigation}) {
   const { path } = route.params;
   let [content, setContent] = React.useState(parse_song(example));
   let onChange = (passage, value) => {
+    console.log('Final saving');
+    console.log(content);
     console.log('Updating the ' + passage + ' passage to ' + value);
-    setContent(value);
+    let new_content = JSON.parse(JSON.stringify(content));
+    new_content['passages'][value] = passage;
+    setContent(new_content);
   }
   let passages = []
-  console.log('Parsed song:');
-  console.log(content['passages']);
-  console.log(content['passages'].length);
   for(let i = 0; i < content['passages'].length; i++)
   {
-    console.log(i);
-    console.log(content['passages'][i]['instruments'][0]);
     passages.push(
-      <Passage content={content['passages'][i]['instruments'][0]} title={content['passages'][i]['title']} onChange={(value) => {onChange(0,value)}}></Passage>
+      <Passage content={content['passages'][i]['instruments'][0]}
+               title={content['passages'][i]['title']}
+               onChange={(value) => {onChange(0,value)}}></Passage>
     )
   }
 
@@ -87,12 +87,12 @@ export function SongScreen({route, navigation}) {
 
 function Passage(props){
   let str_lines = props.content.lines;
-  console.log("Passage: ");
-  console.log(props.title);
+  console.log('Lines:');
+  console.log(props.content.lines);
   let lines = [];
   let onChange = (line, value) => {
       console.log('Updating the line ' + line + ' line to ' + value);
-      let lines = props.content;
+      let lines = props.content.lines;
       lines[line] = value;
       console.log('Updating passage to: ' + lines.join('\t'));
       props.onChange(lines.join('\n'));
