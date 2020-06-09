@@ -2,49 +2,116 @@ import * as React from 'react';
 import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet } from 'react-native';
 import * as RNFS from 'react-native-fs';
 
+var example = `# Asmaradana
+
+## Buka
+· 3 · 2	· 3 · 2	3 3 2 2	· 7 · 6
+
+## Irama Lancar
+2 7 2 6	2 7 2 3	5 3 2 7	3 2 3 7
+6 3 2 7	3 2 7 6	5 3 2 7	3 2 7 6
+
+## Irama Chiblon
+2 3 2 7	3 2 7 8	2 3 2 76	72 35 65 3
+6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7
+6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6
+5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6`
+
+function parse_song(str)
+{
+  let parts = str.split('##');
+  console.log(parts[0]);
+  let title = parts.splice(0,1)[0].substring(2);
+  while(title.includes('\n'))
+    title = title.replace('\n','');
+  console.log(title);
+  let passages = [];
+  for(let i = 0; i < parts.length; i++)
+  {
+    let passage_parts = parts[i].split('\n');
+    let passage_title = passage_parts.splice(0,1);
+    let instrument = '';
+    let instruments = [];
+    let lines = [];
+    for(let j = 0; j < passage_parts.length; j++)
+    {
+      if (passage_parts[j].includes('###'))
+      {// Start of a new  instrument.
+        if (instrument != '')
+        {
+          instruments.push({instrument:instrument,lines:lines})
+          lines = [];
+        }
+        instrument = passage_parts[j];
+      }
+      else if (passage_parts[j].includes('\t'))// line of music.
+        lines.push(passage_parts[j]);
+      // No else, if it is not a instrument or a line it's a blank line.
+    }
+    instruments.push({instrument:instrument,lines:lines});
+    passages.push({title: passage_title, instruments:instruments});
+  }
+  console.log({passages:passages,title:title});
+  return {passages:passages,title:title};
+}
+
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
-  let [content, setContent] = React.useState('Saron 1: 0a 1a 2a 3a\t0b 1b 2b 3b\t0c 1c 2c 3c\t0d 1d 2d 3d\nSaron 1: 0e 1e 2e 3e\t0f 1f 2f 3f\t0g 1g 2g 3g\t0h 1h 2h 3h\nSaron 1: 0i 1i 2i 3i\t0j 1j 2j 3j\t0k 1k 2k 3k\t0l 1l 2l 3l\nSaron 1: 0m 1m 2m 3m\t0n 1n 2n 3n\t0o 1o 2o 3o\t0p 1p 2p 3p');
+  let [content, setContent] = React.useState(parse_song(example));
   let onChange = (passage, value) => {
     console.log('Updating the ' + passage + ' passage to ' + value);
     setContent(value);
+  }
+  let passages = []
+  console.log('Parsed song:');
+  console.log(content['passages']);
+  console.log(content['passages'].length);
+  for(let i = 0; i < content['passages'].length; i++)
+  {
+    console.log(i);
+    console.log(content['passages'][i]['instruments'][0]);
+    passages.push(
+      <Passage content={content['passages'][i]['instruments'][0]} title={content['passages'][i]['title']} onChange={(value) => {onChange(0,value)}}></Passage>
+    )
   }
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View>
-        <Text>Title: { path }</Text>
+        <Text>Title: { content['title'] }</Text>
       </View>
-      <Passage content={content} onChange={(value) => {onChange(0,value)}}></Passage>
+      {passages}
     </View>
   );
 }
 
 function Passage(props){
-  let str_lines = props.content.split('\n');
+  let str_lines = props.content.lines;
+  console.log("Passage: ");
+  console.log(props.title);
   let lines = [];
   let onChange = (line, value) => {
       console.log('Updating the line ' + line + ' line to ' + value);
-      let lines = props.content.split('\n');
+      let lines = props.content;
       lines[line] = value;
       console.log('Updating passage to: ' + lines.join('\t'));
       props.onChange(lines.join('\n'));
   }
 
   for(let i = 0; i < str_lines.length; i ++)
-    lines.push(Line({content: str_lines[i], onChange:(value) => {onChange(i,value)}}));
+    lines.push(Line({content: str_lines[i], instrument: props.content.instrument, onChange:(value) => {onChange(i,value)}}));
   return (
     <View >
+      <Text>{props.title}</Text>
       {lines}
+      <Text></Text>
     </View>
     )
 }
 
 function Line(props)
 {
-  let line = props.content.split(':');
-  let instrument = line[0];
-  let str_gatras = line[1].split('\t');
+  let str_gatras = props.content.split('\t');
   let gatras = [];
   let onChange = (gatra, value) => {
     console.log('Updating the ' + gatra + ' gatra to ' + value);
@@ -56,6 +123,10 @@ function Line(props)
 
   for(let i = 0; i < str_gatras.length; i++)
     gatras.push(Gatra({content: str_gatras[i], onChange:(value) => {onChange(i,value)}}));
+
+  let instrument = '';
+  if (props.content.instrument && props.content.instrument != '')
+    instrument = props.instrument + ' :';
 
   return (
     <View style={{flexDirection:'row'}}>
