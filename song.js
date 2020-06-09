@@ -18,6 +18,8 @@ var example = `# Asmaradana
 6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6
 5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6`
 
+let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
+
 function parse_song(str)
 {
   let parts = str.split('##');
@@ -62,22 +64,20 @@ export function SongScreen({route, navigation}) {
     console.log('Updating the ' + passage + ' passage to ' + value);
     let new_content = JSON.parse(JSON.stringify(content));
     new_content['passages'][value] = passage;
+    console.log(new_content);
     setContent(new_content);
   }
   let passages = []
   for(let i = 0; i < content['passages'].length; i++)
-  {
     passages.push(
-      <Passage content={content['passages'][i]['instruments'][0]}
-               title={content['passages'][i]['title']}
-               onChange={(value) => {onChange(0,value)}}></Passage>
-    )
-  }
+      Passage({content: content['passages'][i]['instruments'][0],
+               title: content['passages'][i]['title'],
+               onChange: (value) => {onChange(0,value)}}));
 
   let addPassage = () => {
     let new_content = JSON.parse(JSON.stringify(content));
     console.log(new_content);
-    new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:['1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4']}]});
+    new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:[defaultLine]}]});
     console.log(new_content);
     console.log("Saving now");
     setContent(new_content);
@@ -107,13 +107,20 @@ function Passage(props){
       console.log('Updating passage to: ' + lines.join('\t'));
       props.onChange(lines.join('\n'));
   }
-
+  let addLine = () => {
+    let lines = props.content.lines;
+    lines.push(defaultLine);
+    console.log("adding line:");
+    console.log(lines);
+    props.onChange(lines.join('\n'));
+  }
   for(let i = 0; i < str_lines.length; i ++)
     lines.push(Line({content: str_lines[i], instrument: props.content.instrument, onChange:(value) => {onChange(i,value)}}));
   return (
     <View >
       <Text>{props.title}</Text>
       {lines}
+      <Button title="Add line" onPress={addLine}><Icon name="plus-circle-outline"/></Button>
       <Text></Text>
     </View>
     )
