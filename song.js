@@ -3,6 +3,26 @@ import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollV
 import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+var json_layout = `{
+	"title":"Song name",
+	"passages":[
+		{
+			"title":"passage title",
+			"instruments":[
+				{
+					"instrument":"instrument name",
+					"lines":[
+						["1","2","3","4"],
+						["1","2","3","4"],
+						["1","2","3","4"],
+						["1","2","3","4"]
+					]
+				}
+			]
+		}
+	]
+}`
+
 var example = `# Asmaradana
 
 ## Buka
@@ -30,7 +50,7 @@ function parse_song(str)
   for(let i = 0; i < parts.length; i++)
   {
     let passage_parts = parts[i].split('\n');
-    let passage_title = passage_parts.splice(0,1);
+    let passage_title = passage_parts.splice(0,1)[0];
     let instrument = '';
     let instruments = [];
     let lines = [];
@@ -46,7 +66,9 @@ function parse_song(str)
         instrument = passage_parts[j];
       }
       else if (passage_parts[j].includes('\t'))// line of music.
-        lines.push(passage_parts[j]);
+      {
+        lines.push(line_to_lists(passage_parts[j]));
+      }
       // No else, if it is not a instrument or a line it's a blank line.
     }
     instruments.push({instrument:instrument,lines:lines});
@@ -55,24 +77,29 @@ function parse_song(str)
   return {passages:passages,title:title};
 }
 
+function line_to_lists(line)
+{
+  let ret = [];
+  let gatra = line.split('\t');
+  for(let i = 0; i < gatra.length; i++)
+    ret.push(gatra[i].split(' '))
+  return ret;
+}
+
+
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
   let [content, setContent] = React.useState(parse_song(example));
-  let onChange = (passage, value) => {
-    console.log('Final saving');
-    console.log(content);
-    console.log('Updating the ' + passage + ' passage to ' + value);
-    let new_content = JSON.parse(JSON.stringify(content));
-    new_content['passages'][value] = passage;
-    console.log(new_content);
-    setContent(new_content);
+  let edit_song = (passage, obj) => {
+    obj.passage = passage;
+    console.log("Updating song: " + JSON.stringify(obj));
+    let line = obj['line'];
+    let gatra = obj['gatra'];
+    let note = obj['note'];
+    console.log(content['passages'][passage]['instruments'][0]['lines']);
+    console.log(content['passages'][passage]['instruments'][0]['lines'][line][gatra][note]);
+    console.log(obj);
   }
-  let passages = []
-  for(let i = 0; i < content['passages'].length; i++)
-    passages.push(
-      Passage({content: content['passages'][i]['instruments'][0],
-               title: content['passages'][i]['title'],
-               onChange: (value) => {onChange(0,value)}}));
 
   let addPassage = () => {
     let new_content = JSON.parse(JSON.stringify(content));
@@ -83,6 +110,14 @@ export function SongScreen({route, navigation}) {
     setContent(new_content);
     console.log("Done");
   }
+
+  let passages = []
+  for(let i = 0; i < content['passages'].length; i++)
+    passages.push(
+      Passage({content: content['passages'][i]['instruments'][0],
+               title: content['passages'][i]['title'],
+               key: i,
+               edit: (obj) => {edit_song(i,obj)}}));
 
   return (
     <ScrollView>
@@ -100,12 +135,10 @@ export function SongScreen({route, navigation}) {
 function Passage(props){
   let str_lines = props.content.lines;
   let lines = [];
-  let onChange = (line, value) => {
-      console.log('Updating the line ' + line + ' line to ' + value);
-      let lines = props.content.lines;
-      lines[line] = value;
-      console.log('Updating passage to: ' + lines.join('\t'));
-      props.onChange(lines.join('\n'));
+
+  let edit_passage = (line, obj) => {
+    obj['line'] = line;
+    props.edit(obj);
   }
   let addLine = () => {
     let lines = props.content.lines;
@@ -115,7 +148,7 @@ function Passage(props){
     props.onChange(lines.join('\n'));
   }
   for(let i = 0; i < str_lines.length; i ++)
-    lines.push(Line({content: str_lines[i], instrument: props.content.instrument, onChange:(value) => {onChange(i,value)}}));
+    lines.push(Line({content: str_lines[i], key: i, instrument: props.content.instrument, edit:(obj) => {edit_passage(i,obj)}}));
   return (
     <View >
       <Text>{props.title}</Text>
@@ -128,18 +161,14 @@ function Passage(props){
 
 function Line(props)
 {
-  let str_gatras = props.content.split('\t');
-  let gatras = [];
-  let onChange = (gatra, value) => {
-    console.log('Updating the ' + gatra + ' gatra to ' + value);
-    let gatras = props.content.split('\t');
-    gatras[gatra] = value;
-    console.log('Updating line to: ' + gatras.join('\t'));
-    props.onChange(gatras.join('\t'));
+  let edit_line = (gatra, obj) => {
+    obj['gatra'] = gatra;
+    props.edit(obj);
   }
 
-  for(let i = 0; i < str_gatras.length; i++)
-    gatras.push(Gatra({content: str_gatras[i], onChange:(value) => {onChange(i,value)}}));
+  let gatras = [];
+  for(let i = 0; i <  props.content.length; i++)
+    gatras.push(Gatra({content:  props.content[i], key: i, edit:(obj) => {edit_line(i,obj)}}));
 
   let instrument = '';
   if (props.content.instrument && props.content.instrument != '')
@@ -155,17 +184,12 @@ function Line(props)
 
 function Gatra(props)
 {
-  let str_notes = props.content.split(' ');
-  let notes = [];
-  let onChange = (note, value) => {
-    console.log('Updating the ' + note + ' note to ' + value);
-    let gatra = props.content.split(' ');
-    gatra[note] = value;
-    console.log('Updating gatra to: ' + gatra.join(' '));
-    props.onChange(gatra.join(' '));
+  let edit_gatra = (note) => {
+    props.edit({note: note});
   }
-  for(let i = 0; i<str_notes.length; i++)
-    notes.push(Note({content: str_notes[i], onChange:(value) => {onChange(i,value)}}));
+  let notes = [];
+  for(let i = 0; i< props.content.length; i++)
+    notes.push(Note({content: props.content[i], key: i, edit:() => {edit_gatra(i)}}));
   return (
     <View style={{flexDirection:'row'}}>
       { notes }
@@ -175,41 +199,41 @@ function Gatra(props)
 
 function Note(props)
 {
-  const [selector_open, set_selector_open] = React.useState(false);
   let handle_press = () => {
     console.log('received press on: ' + props.content);
     console.log('Selector was: ' + selector_open);
-    set_selector_open(!selector_open);
     console.log('Selector is: ' + selector_open);
   };
-  let change_note = (side,value) => {
-    if (side == 'left')
-      if (props.content.length == 1)
-        props.onChange(value);
-      else
-        props.onChange(value + props.content[1]);
-    else
-      props.onChange(props.content[0] + value);
-console.log('Note changed: ' + value + ' : ' + side);
-  }
+
   return (
     <View>
+
+      <TouchableNativeFeedback onPress={props.edit}>
+        <Text style={{minWidth:25}}>{props.content}</Text>
+      </TouchableNativeFeedback>
+    </View>
+  )
+}
+
+function Note_Selector(props)
+{
+  return (
     <Modal
         animationType="slide"
         trasparent={true}
-        visible={selector_open}
+        visible={props.visible}
       >
         <View style={styles.container}>
           <View id="left_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => change_note('left',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => change_note('left','1')}/>
-            <Button title="2" style={styles.button} onPress={() => change_note('left','2')}/>
-            <Button title="3" style={styles.button} onPress={() => change_note('left','3')}/>
-            <Button title="4" style={styles.button} onPress={() => change_note('left','4')}/>
-            <Button title="5" style={styles.button} onPress={() => change_note('left','5')}/>
-            <Button title="6" style={styles.button} onPress={() => change_note('left','6')}/>
-            <Button title="7" style={styles.button} onPress={() => change_note('left','7')}/>
-            <Button title="·" style={styles.button} onPress={() => change_note('left','·')}/>
+            <Button title="␣" style={styles.button} onPress={() => props.change_note('left',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => props.change_note('left','1')}/>
+            <Button title="2" style={styles.button} onPress={() => props.change_note('left','2')}/>
+            <Button title="3" style={styles.button} onPress={() => props.change_note('left','3')}/>
+            <Button title="4" style={styles.button} onPress={() => props.change_note('left','4')}/>
+            <Button title="5" style={styles.button} onPress={() => props.change_note('left','5')}/>
+            <Button title="6" style={styles.button} onPress={() => props.change_note('left','6')}/>
+            <Button title="7" style={styles.button} onPress={() => props.change_note('left','7')}/>
+            <Button title="·" style={styles.button} onPress={() => props.change_note('left','·')}/>
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
@@ -220,22 +244,18 @@ console.log('Note changed: ' + value + ' : ' + side);
             </View>
           </View>
           <View id="right_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => change_note('right',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => change_note('right','1')}/>
-            <Button title="2" style={styles.button} onPress={() => change_note('right','2')}/>
-            <Button title="3" style={styles.button} onPress={() => change_note('right','3')}/>
-            <Button title="4" style={styles.button} onPress={() => change_note('right','4')}/>
-            <Button title="5" style={styles.button} onPress={() => change_note('right','5')}/>
-            <Button title="6" style={styles.button} onPress={() => change_note('right','6')}/>
-            <Button title="7" style={styles.button} onPress={() => change_note('right','7')}/>
-            <Button title="·" style={styles.button} onPress={() => change_note('right','·')}/>
+            <Button title="␣" style={styles.button} onPress={() => props.change_note('right',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => props.change_note('right','1')}/>
+            <Button title="2" style={styles.button} onPress={() => props.change_note('right','2')}/>
+            <Button title="3" style={styles.button} onPress={() => props.change_note('right','3')}/>
+            <Button title="4" style={styles.button} onPress={() => props.change_note('right','4')}/>
+            <Button title="5" style={styles.button} onPress={() => props.change_note('right','5')}/>
+            <Button title="6" style={styles.button} onPress={() => props.change_note('right','6')}/>
+            <Button title="7" style={styles.button} onPress={() => props.change_note('right','7')}/>
+            <Button title="·" style={styles.button} onPress={() => props.change_note('right','·')}/>
           </View>
         </View>
       </Modal>
-      <TouchableNativeFeedback onPress={handle_press}>
-        <Text style={{minWidth:25}}>{props.content}</Text>
-      </TouchableNativeFeedback>
-    </View>
   )
 }
 
