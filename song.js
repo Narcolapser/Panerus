@@ -90,15 +90,19 @@ function line_to_lists(line)
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
   let [content, setContent] = React.useState(parse_song(example));
+  let [show_modal, set_show_modal] = React.useState(false);
+  let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
   let edit_song = (passage, obj) => {
     obj.passage = passage;
     console.log("Updating song: " + JSON.stringify(obj));
     let line = obj['line'];
     let gatra = obj['gatra'];
     let note = obj['note'];
+    set_note_locator(obj);
     console.log(content['passages'][passage]['instruments'][0]['lines']);
     console.log(content['passages'][passage]['instruments'][0]['lines'][line][gatra][note]);
     console.log(obj);
+    set_show_modal(true);
   }
 
   let addPassage = () => {
@@ -111,6 +115,18 @@ export function SongScreen({route, navigation}) {
     console.log("Done");
   }
 
+  let change_note = (note) =>
+  {
+    console.log("changing " + JSON.stringify(note_locator) + " to " + note);
+    console.log(note);
+    content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note] = note;
+    setContent(content);
+  }
+
+  let close_modal = () =>
+  {
+    set_show_modal(false);
+  }
   let passages = []
   for(let i = 0; i < content['passages'].length; i++)
     passages.push(
@@ -120,15 +136,20 @@ export function SongScreen({route, navigation}) {
                edit: (obj) => {edit_song(i,obj)}}));
 
   return (
-    <ScrollView>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View>
-          <Text>Title: { content['title'] }</Text>
+    <View>
+      <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
+        content={content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]}
+      ></Note_Selector>
+      <ScrollView>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View>
+            <Text>Title: { content['title'] }</Text>
+          </View>
+          {passages}
         </View>
-        {passages}
-      </View>
-      <Button title="Add passage" onPress={addPassage}><Icon name="plus-circle-outline"/></Button>
-    </ScrollView>
+        <Button title="Add passage" onPress={addPassage}><Icon name="plus-circle-outline"/></Button>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -217,6 +238,16 @@ function Note(props)
 
 function Note_Selector(props)
 {
+  let format_note = (side,value) =>
+  {
+    if (side == 'left')
+      if (props.content.length == 1)
+        props.change_note(value);
+      else
+        props.change_note(value + props.content[1])
+    else
+      props.change_note(props.content[0] + value);
+  }
   return (
     <Modal
         animationType="slide"
@@ -225,34 +256,34 @@ function Note_Selector(props)
       >
         <View style={styles.container}>
           <View id="left_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => props.change_note('left',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => props.change_note('left','1')}/>
-            <Button title="2" style={styles.button} onPress={() => props.change_note('left','2')}/>
-            <Button title="3" style={styles.button} onPress={() => props.change_note('left','3')}/>
-            <Button title="4" style={styles.button} onPress={() => props.change_note('left','4')}/>
-            <Button title="5" style={styles.button} onPress={() => props.change_note('left','5')}/>
-            <Button title="6" style={styles.button} onPress={() => props.change_note('left','6')}/>
-            <Button title="7" style={styles.button} onPress={() => props.change_note('left','7')}/>
-            <Button title="·" style={styles.button} onPress={() => props.change_note('left','·')}/>
+            <Button title="␣" style={styles.button} onPress={() => format_note('left',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => format_note('left','1')}/>
+            <Button title="2" style={styles.button} onPress={() => format_note('left','2')}/>
+            <Button title="3" style={styles.button} onPress={() => format_note('left','3')}/>
+            <Button title="4" style={styles.button} onPress={() => format_note('left','4')}/>
+            <Button title="5" style={styles.button} onPress={() => format_note('left','5')}/>
+            <Button title="6" style={styles.button} onPress={() => format_note('left','6')}/>
+            <Button title="7" style={styles.button} onPress={() => format_note('left','7')}/>
+            <Button title="·" style={styles.button} onPress={() => format_note('left','·')}/>
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
               <Text >{props.content}</Text>
             </View>
             <View id="note_display" >
-              <Button title="Done" onPress={handle_press} style={styles.button}/>
+              <Button title="Done" onPress={props.close} style={styles.button}/>
             </View>
           </View>
           <View id="right_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => props.change_note('right',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => props.change_note('right','1')}/>
-            <Button title="2" style={styles.button} onPress={() => props.change_note('right','2')}/>
-            <Button title="3" style={styles.button} onPress={() => props.change_note('right','3')}/>
-            <Button title="4" style={styles.button} onPress={() => props.change_note('right','4')}/>
-            <Button title="5" style={styles.button} onPress={() => props.change_note('right','5')}/>
-            <Button title="6" style={styles.button} onPress={() => props.change_note('right','6')}/>
-            <Button title="7" style={styles.button} onPress={() => props.change_note('right','7')}/>
-            <Button title="·" style={styles.button} onPress={() => props.change_note('right','·')}/>
+            <Button title="␣" style={styles.button} onPress={() => format_note('right',' ')}/>
+            <Button title="1" style={styles.button} onPress={() => format_note('right','1')}/>
+            <Button title="2" style={styles.button} onPress={() => format_note('right','2')}/>
+            <Button title="3" style={styles.button} onPress={() => format_note('right','3')}/>
+            <Button title="4" style={styles.button} onPress={() => format_note('right','4')}/>
+            <Button title="5" style={styles.button} onPress={() => format_note('right','5')}/>
+            <Button title="6" style={styles.button} onPress={() => format_note('right','6')}/>
+            <Button title="7" style={styles.button} onPress={() => format_note('right','7')}/>
+            <Button title="·" style={styles.button} onPress={() => format_note('right','·')}/>
           </View>
         </View>
       </Modal>
