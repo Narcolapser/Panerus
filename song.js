@@ -2,26 +2,7 @@ import * as React from 'react';
 import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollView } from 'react-native';
 import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-var json_layout = `{
-	"title":"Song name",
-	"passages":[
-		{
-			"title":"passage title",
-			"instruments":[
-				{
-					"instrument":"instrument name",
-					"lines":[
-						["1","2","3","4"],
-						["1","2","3","4"],
-						["1","2","3","4"],
-						["1","2","3","4"]
-					]
-				}
-			]
-		}
-	]
-}`
+import {parse_song, compile_song} from './pan_file.js';
 
 var example = `# Asmaradana
 
@@ -40,53 +21,6 @@ var example = `# Asmaradana
 
 //let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
 let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3","2","1"]];
-
-function parse_song(str)
-{
-  let parts = str.split('##');
-  let title = parts.splice(0,1)[0].substring(2);
-  while(title.includes('\n'))
-    title = title.replace('\n','');
-  let passages = [];
-  for(let i = 0; i < parts.length; i++)
-  {
-    let passage_parts = parts[i].split('\n');
-    let passage_title = passage_parts.splice(0,1)[0];
-    let instrument = '';
-    let instruments = [];
-    let lines = [];
-    for(let j = 0; j < passage_parts.length; j++)
-    {
-      if (passage_parts[j].includes('###'))
-      {// Start of a new  instrument.
-        if (instrument != '')
-        {
-          instruments.push({instrument:instrument,lines:lines})
-          lines = [];
-        }
-        instrument = passage_parts[j];
-      }
-      else if (passage_parts[j].includes('\t'))// line of music.
-      {
-        lines.push(line_to_lists(passage_parts[j]));
-      }
-      // No else, if it is not a instrument or a line it's a blank line.
-    }
-    instruments.push({instrument:instrument,lines:lines});
-    passages.push({title: passage_title, instruments:instruments});
-  }
-  return {passages:passages,title:title};
-}
-
-function line_to_lists(line)
-{
-  let ret = [];
-  let gatra = line.split('\t');
-  for(let i = 0; i < gatra.length; i++)
-    ret.push(gatra[i].split(' '))
-  return ret;
-}
-
 
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
@@ -125,6 +59,21 @@ export function SongScreen({route, navigation}) {
   {
     set_show_modal(false);
   }
+
+	let save_file = () =>
+	{
+		console.log(content['title']);
+		let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
+		console.log(path)
+		RNFS.writeFile(path,compile_song(content))
+			.then((success) => {
+				alert(content['title'] + ' was saved succesfully');
+			})
+			.catch((err) => {
+				alert('Error saving file: ' + err.message);
+			})
+	}
+
   let passages = []
   for(let i = 0; i < content['passages'].length; i++)
     passages.push(
@@ -139,6 +88,11 @@ export function SongScreen({route, navigation}) {
       <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
         content={content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]}
       ></Note_Selector>
+			<View style={{flexDirection: 'row'}}>
+				<Button title="Save" onPress={save_file}></Button>
+				<Button title="Preview"></Button>
+				<Button title="Export"></Button>
+			</View>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View>
