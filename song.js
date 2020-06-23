@@ -240,14 +240,18 @@ function Note_Selector(props)
 {
   let format_note = (side,value) =>
   {
+		let new_value = '';
     if (side == 'left')
       if (props.content.length == 1)
-        props.change_note(value);
+        new_value = value;
       else
-        props.change_note(value + props.content[1])
+        new_value = value + props.content[1];
     else
-      props.change_note(props.content[0] + value);
+      new_value = props.content[0] + value;
+		set_content(new_value);
+		props.change_note(new_value);
   }
+	let [content, set_content] = React.useState(props.content);
   return (
     <Modal
         animationType="slide"
@@ -268,7 +272,7 @@ function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text >{props.content}</Text>
+              <Text >{content}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>
