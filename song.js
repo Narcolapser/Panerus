@@ -19,14 +19,34 @@ var example = `# Asmaradana
 6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6
 5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6`
 
+let loading = '# loading'
+
 //let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
 let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3","2","1"]];
 
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
-  let [content, setContent] = React.useState(parse_song(example));
-  let [show_modal, set_show_modal] = React.useState(false);
+	let [show_modal, set_show_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
+	let [content, setContent] = React.useState(parse_song(loading));
+
+	console.log(path);
+	if (!path)
+	{
+		console.log('New song')
+	}
+	else
+	{
+		RNFS.readFile(path,'utf8')
+		  .then((contents) => {
+				setContent(parse_song(contents));
+				console.log(content);
+			})
+			.catch((err) => {
+				console.log(err.message, err.code);
+			})
+	}
+
   let edit_song = (passage, obj) => {
     obj.passage = passage;
     let line = obj['line'];
