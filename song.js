@@ -38,7 +38,8 @@ var example = `# Asmaradana
 6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6
 5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6`
 
-let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
+//let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
+let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3","2","1"]];
 
 function parse_song(str)
 {
@@ -94,31 +95,28 @@ export function SongScreen({route, navigation}) {
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
   let edit_song = (passage, obj) => {
     obj.passage = passage;
-    console.log("Updating song: " + JSON.stringify(obj));
     let line = obj['line'];
     let gatra = obj['gatra'];
     let note = obj['note'];
     set_note_locator(obj);
-    console.log(content['passages'][passage]['instruments'][0]['lines']);
-    console.log(content['passages'][passage]['instruments'][0]['lines'][line][gatra][note]);
-    console.log(obj);
     set_show_modal(true);
   }
 
-  let addPassage = () => {
+  let add_passage = () => {
     let new_content = JSON.parse(JSON.stringify(content));
-    console.log(new_content);
     new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:[defaultLine]}]});
-    console.log(new_content);
-    console.log("Saving now");
     setContent(new_content);
-    console.log("Done");
   }
+
+	let add_line = (passage) => {
+		let new_content = JSON.parse(JSON.stringify(content));
+		for(let i = 0; i < new_content['passages'][passage]['instruments'].length; i ++)
+			new_content['passages'][passage]['instruments'][i]['lines'].push(defaultLine);
+		setContent(new_content);
+	}
 
   let change_note = (note) =>
   {
-    console.log("changing " + JSON.stringify(note_locator) + " to " + note);
-    console.log(note);
     content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note] = note;
     setContent(content);
   }
@@ -133,6 +131,7 @@ export function SongScreen({route, navigation}) {
       Passage({content: content['passages'][i]['instruments'][0],
                title: content['passages'][i]['title'],
                key: i,
+							 add_line: add_line,
                edit: (obj) => {edit_song(i,obj)}}));
 
   return (
@@ -147,7 +146,7 @@ export function SongScreen({route, navigation}) {
           </View>
           {passages}
         </View>
-        <Button title="Add passage" onPress={addPassage}><Icon name="plus-circle-outline"/></Button>
+        <Button title="Add passage" onPress={add_passage}><Icon name="plus-circle-outline"/></Button>
       </ScrollView>
     </View>
   );
@@ -162,11 +161,8 @@ function Passage(props){
     props.edit(obj);
   }
   let addLine = () => {
-    let lines = props.content.lines;
-    lines.push(defaultLine);
     console.log("adding line:");
-    console.log(lines);
-    props.onChange(lines.join('\n'));
+    props.add_line(props.key);
   }
   for(let i = 0; i < str_lines.length; i ++)
     lines.push(Line({content: str_lines[i], key: i, instrument: props.content.instrument, edit:(obj) => {edit_passage(i,obj)}}));
