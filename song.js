@@ -28,24 +28,8 @@ export function SongScreen({route, navigation}) {
   const { path } = route.params;
 	let [show_modal, set_show_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
-	let [content, setContent] = React.useState(parse_song(loading));
-
-	console.log(path);
-	if (!path)
-	{
-		console.log('New song')
-	}
-	else
-	{
-		RNFS.readFile(path,'utf8')
-		  .then((contents) => {
-				setContent(parse_song(contents));
-				console.log(content);
-			})
-			.catch((err) => {
-				console.log(err.message, err.code);
-			})
-	}
+	//let [content, setContent] = React.useState(parse_song(loading));
+  let [content, setContent] = React.useState(route.params.content);
 
   let edit_song = (passage, obj) => {
     obj.passage = passage;
@@ -82,9 +66,7 @@ export function SongScreen({route, navigation}) {
 
 	let save_file = () =>
 	{
-		console.log(content['title']);
 		let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
-		console.log(path)
 		RNFS.writeFile(path,compile_song(content))
 			.then((success) => {
 				alert(content['title'] + ' was saved succesfully');
@@ -93,6 +75,19 @@ export function SongScreen({route, navigation}) {
 				alert('Error saving file: ' + err.message);
 			})
 	}
+
+  let delete_file = () =>
+  {
+    let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
+    console.log('Deleting file: ' + path);
+    RNFS.unlink(path)
+    .then(() => {
+      console.log('File deleted');
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+  }
 
   let passages = []
   for(let i = 0; i < content['passages'].length; i++)
@@ -112,6 +107,7 @@ export function SongScreen({route, navigation}) {
 				<Button title="Save" onPress={save_file}></Button>
 				<Button title="Preview"></Button>
 				<Button title="Export"></Button>
+				<Button title="Delete" onPress={delete_file}></Button>
 			</View>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -135,7 +131,6 @@ function Passage(props){
     props.edit(obj);
   }
   let addLine = () => {
-    console.log("adding line:");
     props.add_line(props.key);
   }
   for(let i = 0; i < str_lines.length; i ++)

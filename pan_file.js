@@ -27,7 +27,7 @@ export const requestExternalWrite = async () => {
 export function parse_song(str)
 {
   let parts = str.split('##');
-  let title = parts.splice(0,1)[0].substring(2);
+  let title = parts.splice(0,1)[0].substring(3);
   while(title.includes('\n'))
     title = title.replace('\n','');
   let passages = [];
@@ -114,6 +114,11 @@ export function compile_song(song)
   }
   return outs;
 }
+
+export let new_song = `# Title
+
+## Buka
+· · · ·	· · · ·	· · · ·	· · · ·`
 
 var example = `# Asmaradana
 

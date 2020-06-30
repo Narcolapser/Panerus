@@ -5,11 +5,35 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SongScreen } from './song.js';
+import { parse_song, new_song } from './pan_file.js';
 
 function Document(props){
+  let load = () => {
+    console.log("Loading " + props.name);
+    if (!props.path)
+    {
+      let content = parse_song(new_song);
+      console.log("contents json string: " );
+      console.log(JSON.stringify(content));
+      props.navigation.navigate('Song',{name:props.name, path:props.path, content:content});
+    }
+    else
+    {
+      RNFS.readFile(props.path,'utf8')
+        .then((contents) => {
+          console.log(props.path);
+          let content = parse_song(contents);
+          console.log(content);
+          props.navigation.navigate('Song',{name:props.name, path:props.path, content:content});
+        })
+        .catch((err) => {
+          console.log(err.message, err.code);
+        })
+    }
+  }
   return (
     <TouchableOpacity style={styles.document} key={props.name}
-      onPress={() => props.navigation.navigate('Song',{name:props.name, path:props.path})}>
+      onPress={load}>
       <Text>{props.name}</Text>
     </TouchableOpacity>
     )
