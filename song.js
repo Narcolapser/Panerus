@@ -29,8 +29,15 @@ export function SongScreen({route, navigation}) {
 	let [show_modal, set_show_modal] = React.useState(false);
   let [show_label_modal, set_label_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
+  let [editing_note, set_editing_note] = React.useState('ab');
 	//let [content, setContent] = React.useState(parse_song(loading));
-  let [content, setContent] = React.useState(route.params.content);
+  let [content, _setContent] = React.useState(route.params.content);
+
+  let setContent = (new_content) =>
+  {
+    set_editing_note(new_content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]);
+    _setContent(new_content);
+  }
 
   let edit_song = (passage, obj) => {
     obj.passage = passage;
@@ -38,6 +45,7 @@ export function SongScreen({route, navigation}) {
     let gatra = obj['gatra'];
     let note = obj['note'];
     set_note_locator(obj);
+    set_editing_note(content['passages'][obj.passage]['instruments'][0]['lines'][obj.line][obj.gatra][obj.note]);
     set_show_modal(true);
   }
 
@@ -123,7 +131,7 @@ export function SongScreen({route, navigation}) {
   return (
     <View>
       <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
-        content={content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]}
+        content={editing_note}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={content['title']} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
@@ -235,10 +243,8 @@ function Note_Selector(props)
         new_value = value + props.content[1];
     else
       new_value = props.content[0] + value;
-		set_content(new_value);
 		props.change_note(new_value);
   }
-	let [content, set_content] = React.useState(props.content);
   return (
     <Modal
         animationType="slide"
@@ -259,7 +265,7 @@ function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text >{content}</Text>
+              <Text >{props.content}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>
