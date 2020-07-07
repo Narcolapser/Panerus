@@ -1,4 +1,5 @@
 import * as RNFS from 'react-native-fs';
+import { PermissionsAndroid } from 'react-native';
 
 export const requestExternalWrite = async () => {
   try {
@@ -96,14 +97,14 @@ var json_layout = `{
 
 export function compile_song(song)
 {
-  let outs = '\n# ' + song['title'] + '\n\n';
+  let outs = '# ' + song['title'] + '\n\n';
   for(let p = 0; p < song['passages'].length; p++)
   {
     outs += '## ' + song['passages'][p]['title'] + '\n';
     for (let l = 0; l < song['passages'][p]['instruments'][0]['lines'].length; l++)
     {
       let line = song['passages'][p]['instruments'][0]['lines'][l];
-      for(let g = 0; g < line.length; g++)
+      for(let g = 0; g < 4; g++)
       {
         outs += line[g][0] + ' ';
         outs += line[g][1] + ' ';

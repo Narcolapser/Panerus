@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollView } from 'react-native';
+import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollView, TextInput } from 'react-native';
 import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {parse_song, compile_song} from './pan_file.js';
+import {parse_song, compile_song, requestExternalWrite} from './pan_file.js';
 
 var example = `# Asmaradana
 
@@ -27,6 +27,7 @@ let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
 	let [show_modal, set_show_modal] = React.useState(false);
+  let [show_label_modal, set_label_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
 	//let [content, setContent] = React.useState(parse_song(loading));
   let [content, setContent] = React.useState(route.params.content);
@@ -66,7 +67,8 @@ export function SongScreen({route, navigation}) {
 
 	let save_file = () =>
 	{
-		let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
+    requestExternalWrite()
+		let path = RNFS.DownloadDirectoryPath + '/' + content['title'] + '.pan';
 		RNFS.writeFile(path,compile_song(content))
 			.then((success) => {
 				alert(content['title'] + ' was saved succesfully');
@@ -89,6 +91,26 @@ export function SongScreen({route, navigation}) {
     });
   }
 
+  let edit_label = (id) =>
+  {
+    console.log('Editing: ' + id);
+    set_label_modal(true);
+    //update, close, visible, content
+  }
+
+  let update_label = (id, text) =>
+  {
+    if (id == 'Title')
+      content['title'] = text;
+    console.log(id);
+    console.log(text);
+  }
+
+  let close_label = () =>
+  {
+    set_label_modal(false);
+  }
+
   let passages = []
   for(let i = 0; i < content['passages'].length; i++)
     passages.push(
@@ -103,6 +125,7 @@ export function SongScreen({route, navigation}) {
       <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
         content={content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]}
       ></Note_Selector>
+      <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={content['title']} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
 				<Button title="Save" onPress={save_file}></Button>
 				<Button title="Preview"></Button>
@@ -112,7 +135,7 @@ export function SongScreen({route, navigation}) {
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View>
-            <Text>Title: { content['title'] }</Text>
+            <EditableLabel content={content['title']} edit={edit_label} id='title'></EditableLabel>
           </View>
           {passages}
         </View>
@@ -193,7 +216,6 @@ function Note(props)
 
   return (
     <View>
-
       <TouchableNativeFeedback onPress={props.edit}>
         <Text style={{minWidth:25}}>{props.content}</Text>
       </TouchableNativeFeedback>
@@ -254,6 +276,37 @@ function Note_Selector(props)
             <Button title="7" style={styles.button} onPress={() => format_note('right','7')}/>
             <Button title="·" style={styles.button} onPress={() => format_note('right','·')}/>
           </View>
+        </View>
+      </Modal>
+  )
+}
+
+function EditableLabel(props)
+{
+  let edit_label = () =>
+  {
+    props.edit(props.id);
+  }
+  return (
+    <View>
+      <TouchableNativeFeedback onPress={edit_label}>
+        <Text>{props.content}</Text>
+      </TouchableNativeFeedback>
+    </View>
+  )
+}
+
+function Label_Editor(props)
+{
+  return (
+    <Modal
+        animationType="slide"
+        trasparent={true}
+        visible={props.visible}
+      >
+        <View>
+        <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }} onChangeText={text => props.update(props.id, text)}>{props.content}</TextInput>
+        <Button title='ok' onPress={props.close}></Button>
         </View>
       </Modal>
   )
