@@ -68,7 +68,7 @@ function line_to_lists(line)
 {
   let ret = [];
   let gatra = line.split('\t');
-  for(let i = 0; i < gatra.length; i++)
+  for(let i = 0; i < 4; i++)
     ret.push(gatra[i].split(' '))
   return ret;
 }
