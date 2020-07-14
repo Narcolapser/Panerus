@@ -28,6 +28,8 @@ export function SongScreen({route, navigation}) {
   const { path } = route.params;
 	let [show_modal, set_show_modal] = React.useState(false);
   let [show_label_modal, set_label_modal] = React.useState(false);
+  let [label_selector, set_label_selector] = React.useState(null);
+  let [label_value, set_label_value] = React.useState('');
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
   let [editing_note, set_editing_note] = React.useState('ab');
 	//let [content, setContent] = React.useState(parse_song(loading));
@@ -76,7 +78,7 @@ export function SongScreen({route, navigation}) {
 	let save_file = () =>
 	{
     requestExternalWrite()
-		let path = RNFS.DownloadDirectoryPath + '/' + content['title'] + '.pan';
+		let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
 		RNFS.writeFile(path,compile_song(content))
 			.then((success) => {
 				alert(content['title'] + ' was saved succesfully');
@@ -102,14 +104,27 @@ export function SongScreen({route, navigation}) {
   let edit_label = (id) =>
   {
     console.log('Editing: ' + id);
+    if (id == 'Title')
+    {
+      set_label_value(content['title']);
+      set_label_selector(id);
+    }
+    else {
+      set_label_value(content['passages'][id]['title']);
+      set_label_selector(id);
+    }
+
     set_label_modal(true);
     //update, close, visible, content
   }
 
-  let update_label = (id, text) =>
+  let update_label = (text) =>
   {
-    if (id == 'Title')
+    if (label_selector == 'Title')
       content['title'] = text;
+    else {
+      content['passages'][label_selector]['title'] = text;
+    }
     console.log(id);
     console.log(text);
   }
@@ -126,6 +141,7 @@ export function SongScreen({route, navigation}) {
                title: content['passages'][i]['title'],
                key: i,
 							 add_line: add_line,
+               edit_title: (id) => {edit_label(id)},
                edit: (obj) => {edit_song(i,obj)}}));
 
   return (
@@ -133,7 +149,7 @@ export function SongScreen({route, navigation}) {
       <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
         content={editing_note}
       ></Note_Selector>
-      <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={content['title']} id='Title'></Label_Editor>
+      <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
 				<Button title="Save" onPress={save_file}></Button>
 				<Button title="Preview"></Button>
@@ -168,7 +184,7 @@ function Passage(props){
     lines.push(Line({content: str_lines[i], key: i, instrument: props.content.instrument, edit:(obj) => {edit_passage(i,obj)}}));
   return (
     <View >
-      <Text>{props.title}</Text>
+      <EditableLabel content={props.title} edit={() => {props.edit_title(props.key)}} id='title'></EditableLabel>
       {lines}
       <Button title="Add line" onPress={addLine}><Icon name="plus-circle-outline"/></Button>
       <Text></Text>
@@ -311,7 +327,7 @@ function Label_Editor(props)
         visible={props.visible}
       >
         <View>
-        <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }} onChangeText={text => props.update(props.id, text)}>{props.content}</TextInput>
+        <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }} onChangeText={text => props.update(text)}>{props.content}</TextInput>
         <Button title='ok' onPress={props.close}></Button>
         </View>
       </Modal>
