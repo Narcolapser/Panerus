@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollView, TextInput } from 'react-native';
 import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {parse_song, compile_song, requestExternalWrite} from './pan_file.js';
+import {parse_song, save_song, requestExternalWrite, export_song} from './pan_file.js';
 
 var example = `# Asmaradana
 
@@ -75,19 +75,6 @@ export function SongScreen({route, navigation}) {
     set_show_modal(false);
   }
 
-	let save_file = () =>
-	{
-    requestExternalWrite()
-		let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
-		RNFS.writeFile(path,compile_song(content))
-			.then((success) => {
-				alert(content['title'] + ' was saved succesfully');
-			})
-			.catch((err) => {
-				alert('Error saving file: ' + err.message);
-			})
-	}
-
   let delete_file = () =>
   {
     let path = RNFS.DocumentDirectoryPath + '/' + content['title'] + '.pan';
@@ -144,6 +131,7 @@ export function SongScreen({route, navigation}) {
                edit_title: (id) => {edit_label(id)},
                edit: (obj) => {edit_song(i,obj)}}));
 
+
   return (
     <View>
       <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
@@ -151,9 +139,9 @@ export function SongScreen({route, navigation}) {
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
-				<Button title="Save" onPress={save_file}></Button>
+				<Button title="Save" onPress={() => {save_song(content)}}></Button>
 				<Button title="Preview"></Button>
-				<Button title="Export"></Button>
+				<Button title="Export" onPress={() => {export_song(content)}}></Button>
 				<Button title="Delete" onPress={delete_file}></Button>
 			</View>
       <ScrollView>

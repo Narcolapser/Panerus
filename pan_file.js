@@ -1,5 +1,9 @@
 import * as RNFS from 'react-native-fs';
 import { PermissionsAndroid } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+console.log("==========");
+console.log(RNHTMLtoPDF);
+console.log("==========");
 
 export const requestExternalWrite = async () => {
   try {
@@ -119,6 +123,40 @@ export function compile_song(song)
   }
   return outs;
 }
+
+export async function export_song(song)
+{
+    let options = {
+      html: '<h1>New test</h1>',
+      fileName: 'test',
+      directory: 'Documents'
+    };
+    console.log('creating pdf: ', options);
+    console.log(RNHTMLtoPDF);
+    let file = await RNHTMLtoPDF.convert(options)
+    .then((data) => {
+      console.log(data.filePath);
+      console.log(data.base64);
+    })
+    .catch((err) => {
+      console.error(err);
+      console.log("ERROR HONDLED");
+    });
+}
+
+export function save_song(song)
+{
+  requestExternalWrite()
+  let path = RNFS.DocumentDirectoryPath + '/' + song['title'] + '.pan';
+  RNFS.writeFile(path,compile_song(song))
+    .then((success) => {
+      alert(song['title'] + ' was saved succesfully');
+    })
+    .catch((err) => {
+      alert('Error saving file: ' + err.message);
+    })
+}
+
 
 export let new_song = `#  Title
 
