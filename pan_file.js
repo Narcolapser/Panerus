@@ -38,6 +38,8 @@ export function parse_song(str)
   {
     let passage_parts = parts[i].split('\n');
     let passage_title = passage_parts.splice(0,1)[0];
+    while (passage_title[0] == ' ')
+      passage_title = passage_title.substring(1);
     let instrument = '';
     let instruments = [];
     let lines = [];
