@@ -130,7 +130,7 @@ export function SongScreen({route, navigation}) {
 							 add_line: add_line,
                edit_title: (id) => {edit_label(id)},
                edit: (obj) => {edit_song(i,obj)}}));
-
+               
 
   return (
     <View>

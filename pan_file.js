@@ -127,9 +127,9 @@ export function compile_song(song)
 export async function export_song(song)
 {
     let options = {
-      html: '<h1>New test</h1>',
+      html: render_song(song),
       fileName: 'test',
-      directory: 'Documents'
+      directory: 'Downloads'
     };
     console.log('creating pdf: ', options);
     console.log(RNHTMLtoPDF);
@@ -142,6 +142,29 @@ export async function export_song(song)
       console.error(err);
       console.log("ERROR HONDLED");
     });
+}
+
+function render_song(song)
+{
+  let passages = ''
+  for (let p=0; p < song['passages'].length; p++)
+  {
+    let lines = song['passages'][p]['instruments'][0]['lines'];
+    let str_lines = ''
+    for (let l=0; l<lines.length; l++)
+    {
+      for (let g=0; g<4; g++)
+        for (let n=0; n<4; n++)
+          str_lines += '<span style="min-width: 50px;">' + lines[l][g][n] + '</span>\n';
+      str_lines += '<br/>';
+    }
+    str_lines = str_lines.replace('\\"','\"');
+    passages += `<h3>${song['passages'][p]['title']}</h3><br/>${str_lines}<br/>`
+
+  }
+
+  let title = song['title'];
+  return `<h1>${title}</h1><br>${passages}`
 }
 
 export function save_song(song)
