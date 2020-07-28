@@ -128,8 +128,8 @@ export async function export_song(song)
 {
     let options = {
       html: render_song(song),
-      fileName: 'test',
-      directory: 'Downloads'
+      fileName: song['title'],
+      directory: 'Documents'
     };
     console.log('creating pdf: ', options);
     console.log(RNHTMLtoPDF);
@@ -137,6 +137,7 @@ export async function export_song(song)
     .then((data) => {
       console.log(data.filePath);
       console.log(data.base64);
+      alert(song['title'] + ' was saved exported ');
     })
     .catch((err) => {
       console.error(err);

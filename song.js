@@ -91,7 +91,7 @@ export function SongScreen({route, navigation}) {
   let edit_label = (id) =>
   {
     console.log('Editing: ' + id);
-    if (id == 'Title')
+    if (id == 'title')
     {
       set_label_value(content['title']);
       set_label_selector(id);
@@ -107,7 +107,7 @@ export function SongScreen({route, navigation}) {
 
   let update_label = (text) =>
   {
-    if (label_selector == 'Title')
+    if (label_selector == 'title')
       content['title'] = text;
     else {
       content['passages'][label_selector]['title'] = text;
@@ -130,7 +130,7 @@ export function SongScreen({route, navigation}) {
 							 add_line: add_line,
                edit_title: (id) => {edit_label(id)},
                edit: (obj) => {edit_song(i,obj)}}));
-               
+
 
   return (
     <View>
