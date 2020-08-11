@@ -30,24 +30,23 @@ export function SongScreen({route, navigation}) {
   let [show_label_modal, set_label_modal] = React.useState(false);
   let [label_selector, set_label_selector] = React.useState(null);
   let [label_value, set_label_value] = React.useState('');
-  let [note_locator, set_note_locator] = React.useState({passage:0,line:0,gatra:0,note:0});
+  let [note_locator, set_note_locator] = React.useState({passage:0,line:0,note:0});
   let [editing_note, set_editing_note] = React.useState('ab');
 	//let [content, setContent] = React.useState(parse_song(loading));
   let [content, _setContent] = React.useState(route.params.content);
 
   let setContent = (new_content) =>
   {
-    set_editing_note(new_content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note]);
+    set_editing_note(new_content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.note]);
     _setContent(new_content);
   }
 
   let edit_song = (passage, obj) => {
     obj.passage = passage;
     let line = obj['line'];
-    let gatra = obj['gatra'];
     let note = obj['note'];
     set_note_locator(obj);
-    set_editing_note(content['passages'][obj.passage]['instruments'][0]['lines'][obj.line][obj.gatra][obj.note]);
+    set_editing_note(content['passages'][obj.passage]['instruments'][0]['lines'][obj.line][obj.note]);
     set_show_modal(true);
   }
 
@@ -66,7 +65,7 @@ export function SongScreen({route, navigation}) {
 
   let change_note = (note) =>
   {
-    content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.gatra][note_locator.note] = note;
+    content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.note] = note;
     setContent(content);
   }
 
@@ -182,14 +181,14 @@ function Passage(props){
 
 function Line(props)
 {
-  let edit_line = (gatra, obj) => {
-    obj['gatra'] = gatra;
+  let edit_line = (note, obj) => {
+    obj['note'] = note;
     props.edit(obj);
   }
 
-  let gatras = [];
-  for(let i = 0; i <  props.content.length; i++)
-    gatras.push(Gatra({content:  props.content[i], key: i, edit:(obj) => {edit_line(i,obj)}}));
+  let notes = [];
+  for(let i = 0; i< props.content.length; i++)
+    notes.push(Note({content: props.content[i], key: i, edit:() => {edit_line(i)}}));
 
   let instrument = '';
   if (props.content.instrument && props.content.instrument != '')
@@ -198,21 +197,6 @@ function Line(props)
   return (
     <View style={{flexDirection:'row'}}>
       <Text >{instrument}</Text>
-      {gatras}
-    </View>
-  )
-}
-
-function Gatra(props)
-{
-  let edit_gatra = (note) => {
-    props.edit({note: note});
-  }
-  let notes = [];
-  for(let i = 0; i< props.content.length; i++)
-    notes.push(Note({content: props.content[i], key: i, edit:() => {edit_gatra(i)}}));
-  return (
-    <View style={{flexDirection:'row'}}>
       { notes }
     </View>
   )

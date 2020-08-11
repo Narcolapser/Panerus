@@ -1,9 +1,6 @@
 import * as RNFS from 'react-native-fs';
 import { PermissionsAndroid } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-console.log("==========");
-console.log(RNHTMLtoPDF);
-console.log("==========");
 
 export const requestExternalWrite = async () => {
   try {
@@ -31,6 +28,10 @@ export const requestExternalWrite = async () => {
 
 export function parse_song(str)
 {
+  str = example;
+  while (str.includes('\t'))
+    str = str.replace('\t',' ')
+
   let parts = str.split('##');
   let title = parts.splice(0,1)[0].substring(1);
   while (title[0] == ' ')
@@ -58,9 +59,11 @@ export function parse_song(str)
         }
         instrument = passage_parts[j];
       }
-      else if (passage_parts[j].includes('\t'))// line of music.
+      else if (passage_parts[j].includes(' '))// may be a line of music
       {
-        lines.push(line_to_lists(passage_parts[j]));
+        let notes = (passage_parts[j]).split(' ');
+        if (notes.length >= 16)
+          lines.push(notes);
       }
       // No else, if it is not a instrument or a line it's a blank line.
     }
@@ -68,15 +71,6 @@ export function parse_song(str)
     passages.push({title: passage_title, instruments:instruments});
   }
   return {passages:passages,title:title};
-}
-
-function line_to_lists(line)
-{
-  let ret = [];
-  let gatra = line.split('\t');
-  for(let i = 0; i < 4; i++)
-    ret.push(gatra[i].split(' '))
-  return ret;
 }
 
 var json_layout = `{
@@ -89,10 +83,7 @@ var json_layout = `{
 					"instrument":"instrument name",
 					"lines":[
 						[
-							["1","2","3","4"],
-							["1","2","3","4"],
-							["1","2","3","4"],
-							["1","2","3","4"]
+							["1","2","3","4","1","2","3","4","1","2","3","4","1","2","3","4"]
 						]
 					]
 				}
@@ -110,13 +101,7 @@ export function compile_song(song)
     for (let l = 0; l < song['passages'][p]['instruments'][0]['lines'].length; l++)
     {
       let line = song['passages'][p]['instruments'][0]['lines'][l];
-      for(let g = 0; g < 4; g++)
-      {
-        outs += line[g][0] + ' ';
-        outs += line[g][1] + ' ';
-        outs += line[g][2] + ' ';
-        outs += line[g][3] + '\t';
-      }
+      outs += line.join(' ')
       outs += '\n';
     }
     outs += '\n';
@@ -154,9 +139,8 @@ function render_song(song)
     let str_lines = ''
     for (let l=0; l<lines.length; l++)
     {
-      for (let g=0; g<4; g++)
-        for (let n=0; n<4; n++)
-          str_lines += '<span style="min-width: 50px;">' + lines[l][g][n] + '</span>\n';
+      for (let n=0; n<16; n++)
+        str_lines += '<span style="min-width: 50px;">' + lines[l][n] + '</span>\n';
       str_lines += '<br/>';
     }
     str_lines = str_lines.replace('\\"','\"');
@@ -190,14 +174,14 @@ export let new_song = `#  Title
 var example = `# Asmaradana
 
 ## Buka
-· 3 · 2	· 3 · 2	3 3 2 2	· 7 · 6
+· 3 · 2 · 3 · 2 3 3 2 2 · 7 · 6
 
 ## Irama Lancar
-2 7 2 6	2 7 2 3	5 3 2 7	3 2 3 7
-6 3 2 7	3 2 7 6	5 3 2 7	3 2 7 6
+2 7 2 6 2 7 2 3 5 3 2 7 3 2 3 7
+6 3 2 7 3 2 7 6 5 3 2 7 3 2 7 6
 
 ## Irama Chiblon
-2 3 2 7	3 2 7 8	2 3 2 76	72 35 65 3
-6 7 3 2	6 3 2 7	3 5 3 2	5 3 2 7
-6 7 3 2	6 3 2 7	3 5 3 2	· 7 5 6
-5 3 5 3	7 6 2 7	3 5 3 2	· 7 5 6`
+2 3 2 7 3 2 7 8 2 3 2 76 72 35 65 3
+6 7 3 2 6 3 2 7 3 5 3 2 5 3 2 7
+6 7 3 2 6 3 2 7 3 5 3 2 · 7 5 6
+5 3 5 3 7 6 2 7 3 5 3 2 · 7 5 6`
