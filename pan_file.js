@@ -28,7 +28,6 @@ export const requestExternalWrite = async () => {
 
 export function parse_song(str)
 {
-  str = example;
   while (str.includes('\t'))
     str = str.replace('\t',' ')
 

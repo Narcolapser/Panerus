@@ -3,6 +3,7 @@ import { Button, View, Text, Modal, TouchableNativeFeedback, StyleSheet, ScrollV
 import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {parse_song, save_song, requestExternalWrite, export_song} from './pan_file.js';
+import {Note_Selector} from './note_selector.js'
 
 var example = `# Asmaradana
 
@@ -181,9 +182,8 @@ function Passage(props){
 
 function Line(props)
 {
-  let edit_line = (note, obj) => {
-    obj['note'] = note;
-    props.edit(obj);
+  let edit_line = (note) => {
+    props.edit({note: note});
   }
 
   let notes = [];
@@ -219,61 +219,7 @@ function Note(props)
   )
 }
 
-function Note_Selector(props)
-{
-  let format_note = (side,value) =>
-  {
-		let new_value = '';
-    if (side == 'left')
-      if (props.content.length == 1)
-        new_value = value;
-      else
-        new_value = value + props.content[1];
-    else
-      new_value = props.content[0] + value;
-		props.change_note(new_value);
-  }
-  return (
-    <Modal
-        animationType="slide"
-        trasparent={true}
-        visible={props.visible}
-      >
-        <View style={styles.container}>
-          <View id="left_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => format_note('left',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => format_note('left','1')}/>
-            <Button title="2" style={styles.button} onPress={() => format_note('left','2')}/>
-            <Button title="3" style={styles.button} onPress={() => format_note('left','3')}/>
-            <Button title="4" style={styles.button} onPress={() => format_note('left','4')}/>
-            <Button title="5" style={styles.button} onPress={() => format_note('left','5')}/>
-            <Button title="6" style={styles.button} onPress={() => format_note('left','6')}/>
-            <Button title="7" style={styles.button} onPress={() => format_note('left','7')}/>
-            <Button title="·" style={styles.button} onPress={() => format_note('left','·')}/>
-          </View>
-          <View id="center_display" style={styles.center_display}>
-            <View id="note_display" >
-              <Text >{props.content}</Text>
-            </View>
-            <View id="note_display" >
-              <Button title="Done" onPress={props.close} style={styles.button}/>
-            </View>
-          </View>
-          <View id="right_selectors" style={styles.selector}>
-            <Button title="␣" style={styles.button} onPress={() => format_note('right',' ')}/>
-            <Button title="1" style={styles.button} onPress={() => format_note('right','1')}/>
-            <Button title="2" style={styles.button} onPress={() => format_note('right','2')}/>
-            <Button title="3" style={styles.button} onPress={() => format_note('right','3')}/>
-            <Button title="4" style={styles.button} onPress={() => format_note('right','4')}/>
-            <Button title="5" style={styles.button} onPress={() => format_note('right','5')}/>
-            <Button title="6" style={styles.button} onPress={() => format_note('right','6')}/>
-            <Button title="7" style={styles.button} onPress={() => format_note('right','7')}/>
-            <Button title="·" style={styles.button} onPress={() => format_note('right','·')}/>
-          </View>
-        </View>
-      </Modal>
-  )
-}
+
 
 function EditableLabel(props)
 {
