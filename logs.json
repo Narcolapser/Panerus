@@ -1,0 +1,392 @@
+{
+    "description": "Javanese Gamelan music authoring software.",
+    "name": "Panerus",
+    "path": "/home/toben/Code/ssg/panerus",
+    "posts": [
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-06",
+            "message": "So the note selector had this weird lagging issue. Its been bothering me for weeks now but I've not been able to pin it down. I'm going to have to do something similar for line editors so I had to figure it out. And I did. The state value that I had put in that component was what was causing the problem. I removed it so it is now stateless and depends entirely on it's parent object and it works now. Thank goodness.\n\nI fear performance issues. It takes nearly a second for everything to propagate back and forth. This is acceptable for now, but I will probably need to revisit this and find a way to improve performance. ",
+            "project": "panerus",
+            "title": "State values were what was screwing me up."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-06",
+            "message": "Same problem. ",
+            "project": "panerus",
+            "title": "And fixed load."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-06",
+            "message": "I hard coded in the number of Gatra, this prevents the random \"undefined\" I was getting at the end of the lines. Not sure what was up with those. But there shouldn't be a reason for more than 4 gatra. If you need more than that, add a new line. ",
+            "project": "panerus",
+            "title": "Fixed saving."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-02",
+            "message": "Missed a file.",
+            "project": "panerus",
+            "title": "Missed a file."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-29",
+            "message": "Saving, loading, deleting, all work. They... have their quirks... But the base functionallity is there. ",
+            "project": "panerus",
+            "title": "Buggy as sheol."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-22",
+            "message": "I started working on loading. But I think it needs to be handled outside of the song screen. I just realized by putting it in the function component it will load the file every time it re-renders. Not so good. So I'll have to load the contents and pass it in. But I've got content coming in and being parsed correctly, it's just a matter of getting it to be assigned to the state object correctly. ",
+            "project": "panerus",
+            "title": "Started on loading."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-22",
+            "message": "I now can save files out to .pan files. They save by default to the app's document directory. I'll look into changing the save location in the future, this works for now.\n\nNow though I need to get file loading working. I can save the file but it doesn't matter as every song opens the default string at this point. ",
+            "project": "panerus",
+            "title": "Saving works."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-22",
+            "message": "I can now add new lines. Fantastic! Inching closer to a usable program. ",
+            "project": "panerus",
+            "title": "New lines works."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-22",
+            "message": "I need to move on to more pressing issues. Right now the note selector is delayed in showing the note you are editing until you make a change. ",
+            "project": "panerus",
+            "title": "Good enough for now."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-15",
+            "message": "Actually editing is back, but it doesn't update the modal. I'm going to have to figure out how to pass the data in live but for now I've got it mostly working. Unforutnately an urgent matter has come up that has pulled me away from this for the evening. ",
+            "project": "panerus",
+            "title": "I almost got editing back."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-15",
+            "message": "It would seem react is not to found of having state hooks down in my note components. so I have moved the note editing modal out of note and will be putting it directly into the song screen. This does reduce the amount of \"HTML\" being rendered which is a good thing. I have as a result also had to rewrite the message passing and some of the layout description. I may still get adding new lines in this evening. We'll see. ",
+            "project": "panerus",
+            "title": "Had to rework the data structure."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-08",
+            "message": "I was hoping I would be able to get the ability to add lines to a passage before the evening elapsed. Alas \"Rendered more hooks than during the previous render\" something is a miss. I clearly need to read up a bit on the hooks a little. ",
+            "project": "panerus",
+            "title": "Saddly, new lines not in yet."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-08",
+            "message": "Not pretty yet, but you can now add a new passage to a song. Takes this one step closer to being able to actually write music. ",
+            "project": "panerus",
+            "title": "New passage button"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-08",
+            "message": "I did the little tweaks necessary to get saves all the way up to the song level. I'll have to write a export function that makes the panerus markdown files soon. But I'm glad to have it this far. Now I need the ability to add new passages. ",
+            "project": "panerus",
+            "title": "Saving all the way to the song level."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-08",
+            "message": "I've managed to get multiple passages to be displayed tonight. The song I've been using, Asmaradana, has 3 passages, including the Buka. The gatra grouping is not quite what I'd like but all 3 passages are now displayed. I need to update the logic for saving to get it up to spec with the new file structure.\n\nWhich brings me to: New file structure! I've decided on what I think is a good compromise for the files. I'm doing a mix of what I did previously, gatra's separated by tabs, lines seperated by \\n, and mark down. So it is roughtly: line line line line line line\n\nThat should be sufficently ridged and flexible to allow me to do what I need and still save the files in a human readable format. ",
+            "project": "panerus",
+            "title": "Now displaying multiple passages."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-01",
+            "message": "I've got my editor with events bubbling all the way up back up. Which means I've got basic music editing in place. Next week I will start working on adding and removing passages and lines to passages. ",
+            "project": "panerus",
+            "title": "Editor back."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-06-01",
+            "message": "I've got a basic display of Irama back. It's currently hard coded to get around the constrains of a new document. This is just the basic displaying of a document without any logic connected yet but I can already tell my experience with the first go around is helping a lot. I've managed to get everything to layout correctly using flex box this time. ",
+            "project": "panerus",
+            "title": "Displaying is back."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-18",
+            "message": "The list of documents is loaded from disk. This is great, just the behavior I am looking for. Next week I can start a renewed effort on making the editor. I should be able to just pull in a number of the components I've made previously. Though this time I have decided to try my hand at function components since they are the new hotness. They seem to be an uglier way of accomplishing the same thing. Over all I am pleased with this evening. From scratch to a functional menu is great. ",
+            "project": "panerus",
+            "title": "Document selection functional."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-18",
+            "message": "Making lots of little increments tonight. I think this is safer than bigger batches. More check points to fall back on. Though I'm also hitting a lot of small milestones in rapid succession. ",
+            "project": "panerus",
+            "title": "Opening documents now works."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-18",
+            "message": "To make sure that things were working before I moved on I made some dummy document with a for loop and verified that the scroll view works. Fantastic. Now lets open a new document eh? ",
+            "project": "panerus",
+            "title": "Got some basic documents in a scroll view."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-18",
+            "message": "I've got a new home screen with a middle column. I'm going to next get it populated with the default new doc and as I go hopefully other documents. ",
+            "project": "panerus",
+            "title": "Initial work on rewrite."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-16",
+            "message": "I've proven all the concepts so I'm going to start from scratch now and make this in order of usage. Starting from the main menu. I've wiped it out and am starting a new. ",
+            "project": "panerus",
+            "title": "I'm starting a rewrite."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-11",
+            "message": "Everything exploded, and I don't know why. ",
+            "project": "panerus",
+            "title": "Merge branch 'npx' of https://github.com/Narcolapser/Panerus into npx"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-11",
+            "message": "I've got the home screen rendering more or less. I want to get the new button and editor screen working next. ",
+            "project": "panerus",
+            "title": "Main layout coming."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-11",
+            "message": "I had believed I was going to need a slide in menu, but I'm not sure of that at this point. I'm going to try to get navigation and a list of documents to work next. ",
+            "project": "panerus",
+            "title": "Trimming my plans."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-11",
+            "message": "I've found a menu bar I like and I got it working. Now to add the left slide in menu. ",
+            "project": "panerus",
+            "title": "Added Menu bar."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-11",
+            "message": "I've moved the editor into it's own object. I'd like to get a menu working next. ",
+            "project": "panerus",
+            "title": "Added Editor."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-05",
+            "message": "I've moved the editor into it's own object. I'd like to get a menu working next. ",
+            "project": "panerus",
+            "title": "Added Editor."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-05",
+            "message": "Got the notes to be in the correct order now. ",
+            "project": "panerus",
+            "title": "Layout fixed."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-04",
+            "message": "Added lines. I actually added this like 3 commits ago. Anyway. I decided to use lines as part of the structure of the code since that was the level that the editor would want to work with. This allows for the potential of interlacing lines from multiple instruments. I'm not sure if I'll permit that behavior in the editor, we shall see. ",
+            "project": "panerus",
+            "title": "I hate it when I forget new files."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-04",
+            "message": "I had to tweak a line to get it to work correctly, but saving now works. It basically just worked immediately as soon as I finished my previous effort. With the state variable being updated with everything bubbling up from the lowest levels it was just as simple as save the date. ",
+            "project": "panerus",
+            "title": "Quicky: Saving works."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-04",
+            "message": "This app is currently at about the maximum size I can fit inside my head at one time. Which is not to bad. I'm going to be breaking it into components soon. What I have right now is effectively the editor component of this application. But I've got it working. The note component passes information all the way up to the app and it changes the lines appropriately. Whew. ",
+            "project": "panerus",
+            "title": "Mind bursting."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-04",
+            "message": "I have seen the error in my ways! so to speak. I've done things this way at work in Vue. Note and Gatra shouldn't be holding their own internal state like I'm currently doing. Rather they communicate up the stack that a change has occured and the master data structure at the top gets updated then the change perculates back down. The advantage to this is that the top level data structure is always right. Makes things like loading and saving much easier. ",
+            "project": "panerus",
+            "title": "I need to re-engineer this a bit."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-05-04",
+            "message": "I'm having trouble getting the two notes to be on the same row together. I have learned to use the flexbox tonight. It certainly makes some of these things easier but it isn't quite working the way I expect. Troublesome. Anyway, I've got the note selector layout covering the important things like two rows of notes and displaying what the note currently is. Now I need to wire up the buttons and that should be this part of it all set. ",
+            "project": "panerus",
+            "title": "Note selector basic layout in place."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-27",
+            "message": "I'm going to use a modal display to make the note choice really big and easy so it's touch screen friendly. I started work on that but my evening has run out of time. I got so far as opening to many modals for my device to handle. Now I just need to figure out how to do it once. ",
+            "project": "panerus",
+            "title": "Started work on note selection modal."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-27",
+            "message": "I've got it! the base most proof of concept is working. I have proven that I can do the three critical functions of this application: I can save the songs to a file. I can read the saved songs in from a file. And most importantly, I can export the song to a PDF. Everything after this is making it look pretty. I jest, there is more than that, but it feels like that is the primary thing that I need to do. ",
+            "project": "panerus",
+            "title": "PDF authoring working!"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-27",
+            "message": "I just want to save before I run the risk of breaking things as I try to get over these last hurdles. ",
+            "project": "panerus",
+            "title": "I think I'm close to getting PDFS to work."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-20",
+            "message": "I've saved and I have loaded. They are pretty cludgy so far but I have proven I can do it. I will call that good enough for now. Next I want to prove that I can make a PDF from this content. That will be a fun challenge for next week. If I can do that then this project is fully green light, change full steam ahead! Let's make something cool. ",
+            "project": "panerus",
+            "title": "In and out!"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-20",
+            "message": "I converted to a class from a function object. I like classes, they make more sense to me. I'm going to use this to pass state down to the objects like you are generally supposed to. I believe I will have to map state back up from Gatra and notes, which means for now I can assume that lines object of state should be just fine to be the thing I save. ",
+            "project": "panerus",
+            "title": "Now with class!"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-20",
+            "message": "I've got file managing working. I'm going to move now to try to get the default items I have pasted into my gatras to save into a file next. But I am commiting here so I've got a solid base to return to. It came together surprisingly easy. I'm pleased. ",
+            "project": "panerus",
+            "title": "File managing working."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-20",
+            "message": "I've got a ways to go to make it pretty, but if I can't get the file manager aspects of this program to work then it will be all for naught. I must be able to save and load files and I must be able to export to PDF or none of this will be useful. ",
+            "project": "panerus",
+            "title": "Display back to functional."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-20",
+            "message": "So appearently I never commited gatra.js. That's highly unfortunate, but sounds like me. I need to get better at noticing untracked files. But fortunately I had commited note.js and that was the one with most of the work in it. So I copied those over and rebuilt everything. It deployed! I'm going to get the display working again but it is nice to see all the classes are in and running again. ",
+            "project": "panerus",
+            "title": "Moved over."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-16",
+            "message": "I think I have succesfully transfered over to android studio proper. Which makes this kind of my initial commit... again... I was really uncertain at this point whether I would stick with React Native or not. I have decided I will for two reasons. First: It is still React and as such opperates in the React mind set. React is what I'm currently interested in learning, so that is one point. The other reason is actually iOS. I'm making something that I hope will get use by the national music museum and other places like it. Odds are they use iPads for everything so it would be quite beneficial to have the ability to publish to the apple app store as well. ",
+            "project": "panerus",
+            "title": "It appears to be working."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-14",
+            "message": "Had to learn how react native was expecting things. Primarily I figured that react native is not react. The mind set is the same but one is a web frame work the other is a UI frame work. I now know that I can't use any HTML tags, I just code in an HTML style. ",
+            "project": "panerus",
+            "title": "Mostly back now."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-14",
+            "message": "I've gutted some of the formatting to get here but I have managed to get the app to run on an android device again. I'll now work from here to get it back into how it is supposed to look before I press on to saving and loading. ",
+            "project": "panerus",
+            "title": "Restored Android compatibility."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-06",
+            "message": "I had to put effort into getting the format correct. It was really hard to examine the results of my work with it all scrunched together. The result is I now have something that actually looks like my objective which is pretty sweet. Now onto file reading. ",
+            "project": "panerus",
+            "title": "Pretty! Got a basic layout."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-04-06",
+            "message": "I've got a basic system for notes in place. It doesn't handle 8th notes or diacritical marking yet, and it really throws the UI for a loop every time you open and close the selection menu, but it is a start. I want to save now while it is working before I go onto the next part of this. ",
+            "project": "panerus",
+            "title": "Got notes."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-03-30",
+            "message": "I am going to try to make a Gamelan Composing App. I've got a lot of thinking to figure out how I am going to go about this, but I think if I keep this simple it shouldn't be to difficult of an application to make and that will give me another feather in my cap or rather my first feather of note. My other two apps are hardly worth mentioning. ",
+            "project": "panerus",
+            "title": "Initial commit"
+        }
+    ],
+    "url": "/panerus"
+}
