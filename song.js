@@ -4,6 +4,8 @@ import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {parse_song, save_song, requestExternalWrite, export_song} from './pan_file.js';
 import {Note_Selector} from './note_selector.js'
+import {Line} from './line.js'
+import {Note} from './note.js'
 
 var example = `# Asmaradana
 
@@ -144,15 +146,17 @@ export function SongScreen({route, navigation}) {
 				<Button title="Export" onPress={() => {export_song(content)}}></Button>
 				<Button title="Delete" onPress={delete_file}></Button>
 			</View>
-      <ScrollView>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <View>
-            <EditableLabel content={content['title']} edit={edit_label} id='title'></EditableLabel>
+      <View style={{width:"100%"}}>
+        <ScrollView style={{width:"100%"}}>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View>
+              <EditableLabel content={content['title']} edit={edit_label} id='title'></EditableLabel>
+            </View>
+            {passages}
           </View>
-          {passages}
-        </View>
-        <Button title="Add passage" onPress={add_passage}><Icon name="plus-circle-outline"/></Button>
-      </ScrollView>
+          <Button title="Add passage" onPress={add_passage}><Icon name="plus-circle-outline"/></Button>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -171,7 +175,7 @@ function Passage(props){
   for(let i = 0; i < str_lines.length; i ++)
     lines.push(Line({content: str_lines[i], key: i, instrument: props.content.instrument, edit:(obj) => {edit_passage(i,obj)}}));
   return (
-    <View >
+    <View style={{flex:1,width:"80%"}}>
       <EditableLabel content={props.title} edit={() => {props.edit_title(props.key)}} id='title'></EditableLabel>
       {lines}
       <Button title="Add line" onPress={addLine}><Icon name="plus-circle-outline"/></Button>
@@ -179,47 +183,6 @@ function Passage(props){
     </View>
     )
 }
-
-function Line(props)
-{
-  let edit_line = (note) => {
-    props.edit({note: note});
-  }
-
-  let notes = [];
-  for(let i = 0; i< props.content.length; i++)
-    notes.push(Note({content: props.content[i], key: i, edit:() => {edit_line(i)}}));
-
-  let instrument = '';
-  if (props.content.instrument && props.content.instrument != '')
-    instrument = props.instrument + ' :';
-
-  return (
-    <View style={{flexDirection:'row'}}>
-      <Text >{instrument}</Text>
-      { notes }
-    </View>
-  )
-}
-
-function Note(props)
-{
-  let handle_press = () => {
-    console.log('received press on: ' + props.content);
-    console.log('Selector was: ' + selector_open);
-    console.log('Selector is: ' + selector_open);
-  };
-
-  return (
-    <View>
-      <TouchableNativeFeedback onPress={props.edit}>
-        <Text style={{minWidth:25}}>{props.content}</Text>
-      </TouchableNativeFeedback>
-    </View>
-  )
-}
-
-
 
 function EditableLabel(props)
 {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import {Note} from './note.js'
 
 function Selector_Button(props)
 {
@@ -27,8 +28,11 @@ export function Note_Selector(props)
         new_value = value;
       else
         new_value = value + props.content[1];
-    else
+    else if (side == 'right')
       new_value = props.content[0] + value;
+    else if (side == 'left-mark')
+      new_value
+    else if (side == 'right-mark')
 		props.change_note(new_value);
   }
 
@@ -43,13 +47,15 @@ export function Note_Selector(props)
   let diacritics = ['','g','n','8'];
   let left_diacritics = [];
   for(let i = 0; i < diacritics.length; i++)
-    left_diacritics.push(<Selector_Button title={diacritics[i] + props.content[0]} titleStyle={styles.button} onPress={() => format_note('left',diacritics[i])}/>)
+    left_diacritics.push(<Note note={{left_diacritic:diacritics[i],left:props.content[0]}}
+      onPress={() => format_note('left-mark',diacritics[i])}/>)
   let right_diacritics = [];
   let right_holder = '·'
   if (props.content.length > 1)
     right_holder = props.content[1]
   for(let i = 0; i < diacritics.length; i++)
-    right_diacritics.push(<Selector_Button title={diacritics[i] + right_holder} style={styles.button} onPress={() => format_note('left',diacritics[i])}/>)
+    right_diacritics.push(<Note note={{left_diacritic:diacritics[i],left:right_holder}}
+        onPress={() => format_note('right-mark',diacritics[i])}/>)
 
   return (
     <Modal
@@ -66,7 +72,7 @@ export function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text style={{ fontFamily: 'kepatihan' }} >g{props.content}</Text>
+              <Text style={{ fontFamily: 'kepatihan' }} >{props.content}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>
