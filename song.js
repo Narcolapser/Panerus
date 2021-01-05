@@ -4,8 +4,10 @@ import * as RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {parse_song, save_song, requestExternalWrite, export_song} from './pan_file.js';
 import {Note_Selector} from './note_selector.js'
+import {Passage} from './passage.js'
 import {Line} from './line.js'
 import {Note} from './note.js'
+import {EditableLabel, Label_Editor} from './editablelabel.js'
 
 var example = `# Asmaradana
 
@@ -175,64 +177,7 @@ export function SongScreen({route, navigation}) {
   );
 }
 
-function Passage(props){
-  let str_lines = props.content.lines;
-  let lines = [];
 
-  let edit_passage = (line, obj) => {
-    obj['line'] = line;
-    props.edit(obj);
-  }
-  let addLine = () => {
-    props.add_line(props.key);
-  }
-  for(let i = 0; i < str_lines.length; i ++)
-    lines.push(Line({passage: props.key,
-                     content: str_lines[i],
-                     key: i,
-                     instrument: props.content.instrument,
-                     edit: props.edit}));
-
-  return (
-    <View style={{flex:1,width:"80%"}}>
-      <EditableLabel content={props.title} edit={() => {props.edit_title(props.key)}} id='title'></EditableLabel>
-      {lines}
-      <Button title="Add line" onPress={props.edit}><Icon name="plus-circle-outline"/></Button>
-      <Text></Text>
-    </View>
-    )
-}
-
-function EditableLabel(props)
-{
-  let edit_label = () =>
-  {
-    props.edit(props.id);
-  }
-  return (
-    <View>
-      <TouchableNativeFeedback onPress={edit_label}>
-        <Text>{props.content}</Text>
-      </TouchableNativeFeedback>
-    </View>
-  )
-}
-
-function Label_Editor(props)
-{
-  return (
-    <Modal
-        animationType="slide"
-        trasparent={true}
-        visible={props.visible}
-      >
-        <View>
-        <TextInput style={{ height: 40, borderColor: 'gray', borderWidth: 1 }} onChangeText={text => props.update(text)}>{props.content}</TextInput>
-        <Button title='ok' onPress={props.close}></Button>
-        </View>
-      </Modal>
-  )
-}
 
 const styles = StyleSheet.create({
   container: {
