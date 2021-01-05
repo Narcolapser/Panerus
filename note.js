@@ -10,7 +10,8 @@ export function Note(props)
   let right = '';
 
   // Check for item in the note object and populate the local value if it is there.
-    if ('left_diacritic' in props.note)
+
+  if ('left_diacritic' in props.note)
     left_d = props.note['left_diacritic']
   if ('left' in props.note)
     left = props.note['left']
@@ -25,9 +26,14 @@ export function Note(props)
   if (right == '')
     right_d = ''
 
+  // let passage = props.passage;
+  // let line = props.line;
+  // let key = props.key;
+  // console.log("Note Locator:" + passage + line + key);
+
   return (
     <View style={{flex:1}}>
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={() => {console.log('Note Pressed');props.edit(props.passage, props.line, props.key);}}>
         <Text style={{ fontFamily: 'kepatihan' }} >{left_d}{left}{right_d}{right}</Text>
       </TouchableOpacity>
     </View>

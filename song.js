@@ -29,13 +29,19 @@ let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3
 
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
-	let [show_modal, set_show_modal] = React.useState(false);
   let [show_label_modal, set_label_modal] = React.useState(false);
   let [label_selector, set_label_selector] = React.useState(null);
   let [label_value, set_label_value] = React.useState('');
+
+
+  let [focus, set_focus] = React.useState('ab');
+  let [show_note_selector, set_show_note_selector] = React.useState(false);
+
+  let [show_modal, set_show_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,note:0});
   let [editing_note, set_editing_note] = React.useState('ab');
-	//let [content, setContent] = React.useState(parse_song(loading));
+
+
   let [content, _setContent] = React.useState(route.params.content);
 
   let setContent = (new_content) =>
@@ -51,6 +57,13 @@ export function SongScreen({route, navigation}) {
     set_note_locator(obj);
     set_editing_note(content['passages'][obj.passage]['instruments'][0]['lines'][obj.line][obj.note]);
     set_show_modal(true);
+  }
+
+  let edit_note = (passage, line, note) => {
+    console.log('editing note!');
+    console.log(passage, line, note);
+    //set_focus(obj);
+    //set_show_note_selector(true);
   }
 
   let add_passage = () => {
@@ -131,13 +144,14 @@ export function SongScreen({route, navigation}) {
                key: i,
 							 add_line: add_line,
                edit_title: (id) => {edit_label(id)},
-               edit: (obj) => {edit_song(i,obj)}}));
+               edit: edit_note}));
+               //edit: (obj) => {edit_song(i,obj)}}));
 
 
+               //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
   return (
     <View>
-      <Note_Selector change_note={change_note} visible={show_modal} close={close_modal}
-        content={editing_note}
+      <Note_Selector change_note={change_note} visible={show_note_selector} close={close_modal}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
@@ -173,12 +187,17 @@ function Passage(props){
     props.add_line(props.key);
   }
   for(let i = 0; i < str_lines.length; i ++)
-    lines.push(Line({content: str_lines[i], key: i, instrument: props.content.instrument, edit:(obj) => {edit_passage(i,obj)}}));
+    lines.push(Line({passage: props.key,
+                     content: str_lines[i],
+                     key: i,
+                     instrument: props.content.instrument,
+                     edit: props.edit}));
+
   return (
     <View style={{flex:1,width:"80%"}}>
       <EditableLabel content={props.title} edit={() => {props.edit_title(props.key)}} id='title'></EditableLabel>
       {lines}
-      <Button title="Add line" onPress={addLine}><Icon name="plus-circle-outline"/></Button>
+      <Button title="Add line" onPress={props.edit}><Icon name="plus-circle-outline"/></Button>
       <Text></Text>
     </View>
     )

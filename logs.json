@@ -1,8 +1,121 @@
 {
     "description": "Javanese Gamelan music authoring software.",
+    "files": [],
     "name": "Panerus",
     "path": "/home/toben/Code/ssg/panerus",
     "posts": [
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-09-21",
+            "message": "I've begun a rather large refactor. This was brought about due to new information that has come from the change from unicode to the kepatihan font. Saddly my objective of having a plain save file won't be viable any more since I am not using unicode anymore. Unicode was one thing but g4 isn't going to make sense as a four with a cirlce around it. So I am refactoring with notes as objects instead of strings. This will make a lot of the logic around them much easier since I can address the parts and the diacritical markings directly.\n\nI've got a new note component completed and was working on updating line. I ran aground for a while trying to get the layout of the line to work since it isn't being forced from the bottom up anymore. Just got it's width set in the right spot and now it is time for bed. But I am glad to see some progress in a direction that should get me around my current blockers. ",
+            "project": "panerus",
+            "title": "Refactoring from the note."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-08-31",
+            "message": "It is not pretty yet, but it works. I have diacritical markings working. Appearently diacritical markings is not the most accurate way of describing them. The whole notation system is called Kepatihan which is where the font draws its name. I may change the name of this project from Panerus to Kepatihan at some point in the future as that name makes more sense. ",
+            "project": "panerus",
+            "title": "KepatihanPro font works."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-08-19",
+            "message": "Adding website resources.",
+            "project": "panerus",
+            "title": "Adding website resources."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-08-17",
+            "message": "So I wanted to do this with Unicode and its combining characters. But it would seem that such is not actually possible. The things that are kinda sorta like the symbols used in gamelan are not actually close enough to work for my needs. So I found a gamelan font and will be high jacking the normal ascii character name space. this should be interesting. ",
+            "project": "panerus",
+            "title": "Unicode is a no go."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-08-10",
+            "message": "Moved Note_Selector to its own file to try to reduce song.js a little more. Moving each part to its own file seems like it would be more trouble than it is worth so I think I'll leave it here for now. Right now though I want to get diacritical markings working. ",
+            "project": "panerus",
+            "title": "Moved out note_selector"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-08-10",
+            "message": "While technically accurate they were un-necessary to get the program to work and just created new overhead. So I have decided to remove the construct of Gatras inorder to make the code and file format simplier. ",
+            "project": "panerus",
+            "title": "Removed Gatras."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-27",
+            "message": "I sorted out some issues with some of the basic functions like change titles of lines and a notification of PDF export. ",
+            "project": "panerus",
+            "title": "A couple quick pain points."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-27",
+            "message": "I've gotten a alpha version up in the Playstore. In fiddling with it I have realized there are a number of things that need to be ironed out, but at least I've got something in the play store. Technically my 3 time doing such. Can't say it is my third app published because it's not yet published and I never ended up publishing cuddlefish. But I don't think I'm far from an actual published app at this rate. ",
+            "project": "panerus",
+            "title": "Releasable."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-20",
+            "message": "Everything is so fiddly. They've done a great job and making life simple for the users, but not necessarily for the developers. ",
+            "project": "panerus",
+            "title": "Trying to get publishing working."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-20",
+            "message": "It's still got a lot to be desired but it works. I'm going to see if I can figure out the publishing pipeline for the rest of the evening. I'm still hoping that some one on reddit will see my post and give me some great advise. ",
+            "project": "panerus",
+            "title": "Hacked basic PDF render in place."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-20",
+            "message": "I'm about to ask for help on reddit and I saw a small typo in my README.md file that might confuse. ",
+            "project": "panerus",
+            "title": "Quick typo fix."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-13",
+            "message": "I've enabled multidex support because my project is a bloatten. Inevitable when you use third party libraries. But saves me time so worth it. I also got the PDF library to import and author a PDF. So now I just need to get it to author the content from my song into a PDF and we have a minimum viable product. ",
+            "project": "panerus",
+            "title": "Ready for PDFin."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-13",
+            "message": "Just added a pair of lines to loop over the line while it has leading spaces and remove them. ",
+            "project": "panerus",
+            "title": "Fixed the space error."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2020-07-13",
+            "message": "That should be enough to do the most basic of operations. I can make a new song, add passages, add lines to those passages. Change the name of the song and of the passages. There is still a minor issue with saving or loading where an extra space is getting tacked on to the front of the passage name. After that if I can get a decent PDF export I should have a minimum viable product. ",
+            "project": "panerus",
+            "title": "Passage Label editing working."
+        },
         {
             "author": "Toben Archer",
             "branch": "master",
@@ -388,5 +501,6 @@
             "title": "Initial commit"
         }
     ],
+    "rank": 5,
     "url": "/panerus"
 }

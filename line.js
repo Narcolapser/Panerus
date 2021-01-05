@@ -8,12 +8,8 @@ import {Note} from './note.js'
 
 export function Line(props)
 {
-  let edit_line = (note) => {
-    props.edit({note: note});
-  }
-
   let notes = [];
-
+  //console.log("line: " + props.key + " of passage: " + props.passage);
   // Transitionary method for translating existing given values into what note expects.
   for(let i = 0; i< props.content.length; i++)
   {
@@ -25,9 +21,13 @@ export function Line(props)
       left = props.content[i][0]
       right = props.content[i][1]
     }
-    notes.push(
-        <Note note={{left:left,right:right}} key={i} edit={() => edit_line(i)}/>
-    )
+
+
+    notes.push(Note({passage:props.passage,
+                     line:props.key,
+                     note:{left:left,right:right},
+                     key:i,
+                     edit:props.edit}));
   }
 
   let instrument = '';
