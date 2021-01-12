@@ -60,7 +60,20 @@ export function parse_song(str)
       }
       else if (passage_parts[j].includes(' '))// may be a line of music
       {
-        let notes = (passage_parts[j]).split(' ');
+        let raw_notes = (passage_parts[j]).split(' ');
+        let notes = [];
+        for(let i = 0; i< raw_notes.length; i++)
+        {
+          let left = '';
+          let right = '';
+          if(raw_notes[i].length == 1)
+            left = raw_notes[i]
+          else {
+            left = raw_notes[i][0]
+            right = raw_notes[i][1]
+          }
+          notes.push({left:left,right:right});
+        }
         if (notes.length >= 16)
           lines.push(notes);
       }
@@ -69,6 +82,7 @@ export function parse_song(str)
     instruments.push({instrument:instrument,lines:lines});
     passages.push({title: passage_title, instruments:instruments});
   }
+  console.log({passages:passages,title:title});
   return {passages:passages,title:title};
 }
 
