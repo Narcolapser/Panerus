@@ -36,7 +36,7 @@ export function SongScreen({route, navigation}) {
   let [label_value, set_label_value] = React.useState('');
 
 
-  let [focus, set_focus] = React.useState('ab');
+  let [focus, set_focus] = React.useState({passage:0,line:0,note:0});
   let [show_note_selector, set_show_note_selector] = React.useState(false);
 
   let [show_modal, set_show_modal] = React.useState(false);
@@ -64,8 +64,8 @@ export function SongScreen({route, navigation}) {
   let edit_note = (passage, line, note) => {
     console.log('editing note!');
     console.log(passage, line, note);
-    //set_focus(obj);
-    //set_show_note_selector(true);
+    set_focus({passage:passage,line:line,note:note});
+    set_show_note_selector(true);
   }
 
   let add_passage = () => {
@@ -89,7 +89,7 @@ export function SongScreen({route, navigation}) {
 
   let close_modal = () =>
   {
-    set_show_modal(false);
+    set_show_note_selector(false);
   }
 
   let delete_file = () =>
@@ -151,9 +151,11 @@ export function SongScreen({route, navigation}) {
 
 
                //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
+
   return (
     <View>
       <Note_Selector change_note={change_note} visible={show_note_selector} close={close_modal}
+        content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
