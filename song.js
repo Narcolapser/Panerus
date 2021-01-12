@@ -38,33 +38,24 @@ export function SongScreen({route, navigation}) {
 
   let [focus, set_focus] = React.useState({passage:0,line:0,note:0});
   let [show_note_selector, set_show_note_selector] = React.useState(false);
+  let [focus_note, set_focus_note] = React.useState('ab');
 
   let [show_modal, set_show_modal] = React.useState(false);
   let [note_locator, set_note_locator] = React.useState({passage:0,line:0,note:0});
-  let [editing_note, set_editing_note] = React.useState('ab');
-
 
   let [content, _setContent] = React.useState(route.params.content);
 
   let setContent = (new_content) =>
   {
-    set_editing_note(new_content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.note]);
+    set_focus_note(content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]);
     _setContent(new_content);
-  }
-
-  let edit_song = (passage, obj) => {
-    obj.passage = passage;
-    let line = obj['line'];
-    let note = obj['note'];
-    set_note_locator(obj);
-    set_editing_note(content['passages'][obj.passage]['instruments'][0]['lines'][obj.line][obj.note]);
-    set_show_modal(true);
   }
 
   let edit_note = (passage, line, note) => {
     console.log('editing note!');
     console.log(passage, line, note);
     set_focus({passage:passage,line:line,note:note});
+    set_focus_note(content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]);
     set_show_note_selector(true);
   }
 
@@ -83,7 +74,8 @@ export function SongScreen({route, navigation}) {
 
   let change_note = (note) =>
   {
-    content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.note] = note;
+    //content['passages'][note_locator.passage]['instruments'][0]['lines'][note_locator.line][note_locator.note] = note;
+    content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note] = note
     setContent(content);
   }
 
@@ -152,10 +144,10 @@ export function SongScreen({route, navigation}) {
 
                //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
 
+               //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
   return (
     <View>
-      <Note_Selector change_note={change_note} visible={show_note_selector} close={close_modal}
-        content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
+      <Note_Selector change_note={change_note} visible={show_note_selector} close={close_modal} content={focus_note}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>

@@ -18,13 +18,22 @@ function Selector_Button(props)
 
 export function Note_Selector(props)
 {
+  let update_note = (part,value) =>
+  {
+    if (value == '␣')
+      value = ' ';
+    let ret = {...props.content};
+    ret[part] = value;
+    console.log(ret);
+    props.change_note(ret);
+  }
   let notes = ['␣','1','2','3','4','5','6','7','·'];
   let left_buttons = [];
   for(let i = 0; i < notes.length; i++)
-    left_buttons.push(<Button title={notes[i]} style={styles.button}/>)
+    left_buttons.push(<Button title={notes[i]} style={styles.button} onPress={() => update_note('left',notes[i])}/>)
   let right_buttons = [];
   for(let i = 0; i < notes.length; i++)
-    right_buttons.push(<Button title={notes[i]} style={styles.button}/>)
+    right_buttons.push(<Button title={notes[i]} style={styles.button} onPress={() => update_note('right',notes[i])}/>)
 
   let diacritics = ['','g','n','8'];
 
