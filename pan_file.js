@@ -72,7 +72,7 @@ export function parse_song(str)
             left = raw_notes[i][0]
             right = raw_notes[i][1]
           }
-          notes.push({left:left,right:right});
+          notes.push({left:left,right:right,left_diacritic:'',right_diacritic:''});
         }
         if (notes.length >= 16)
           lines.push(notes);
