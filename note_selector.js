@@ -18,11 +18,12 @@ function Selector_Button(props)
 
 export function Note_Selector(props)
 {
+  let note = props.content['passages'][props.focus.passage]['instruments'][0]['lines'][props.focus.line][props.focus.note]
   let update_note = (part,value) =>
   {
     if (value == '␣')
       value = ' ';
-    let ret = {...props.content};
+    let ret = {...note};
     ret[part] = value;
     console.log(ret);
     props.change_note(ret);
@@ -38,15 +39,16 @@ export function Note_Selector(props)
   let diacritics = ['','g','n','8'];
   let ldb = [];
   for(let i = 0; i < diacritics.length; i++)
-    ldb.push(<Selector_Button title={diacritics[i] + props.content.left} style={styles.button}
+    ldb.push(<Selector_Button title={diacritics[i] + note.left} style={styles.button}
       onPress={() => update_note('left_diacritic',diacritics[i])}/>)
   let rdb = [];
   for(let i = 0; i < diacritics.length; i++)
-    rdb.push(<Selector_Button title={diacritics[i] + props.content.right} style={styles.button}
+    rdb.push(<Selector_Button title={diacritics[i] + note.right} style={styles.button}
       onPress={() => update_note('right_diacritic',diacritics[i])}/>)
 
   console.log('content')
-  console.log(props.content);
+  console.log(note);
+
   return (
     <Modal
         animationType="slide"
@@ -62,7 +64,7 @@ export function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text style={{ fontFamily: 'kepatihan' }} >{props.content.left} {props.content.right}</Text>
+              <Text style={{ fontFamily: 'kepatihan' }} >{note.left} {note.right}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>

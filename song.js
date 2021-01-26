@@ -153,7 +153,7 @@ export function SongScreen({route, navigation}) {
                //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
   return (
     <View>
-      <Note_Selector change_note={change_note} content={focus_note} visible={show_note_selector} close={close_modal} 
+      <Note_Selector change_note={change_note} content={content} focus={focus} visible={show_note_selector} close={close_modal}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexDirection: 'row'}}>
