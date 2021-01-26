@@ -37,7 +37,7 @@ export function SongScreen({route, navigation}) {
 
 
   let [focus, set_focus] = React.useState({passage:0,line:0,note:0});
-  let [show_note_selector, _set_show_note_selector] = React.useState(false);
+  let [show_note_selector, set_show_note_selector] = React.useState(false);
   let [focus_note, set_focus_note] = React.useState('ab');
 
   let [show_modal, set_show_modal] = React.useState(false);
@@ -51,17 +51,11 @@ export function SongScreen({route, navigation}) {
     _setContent(new_content);
   }
 
-  let set_show_note_selector = (new_state) =>
-  {
-    set_focus_note(content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]);
-    _set_show_note_selector(new_state);
-  }
 
   let edit_note = (passage, line, note) => {
     console.log('editing note!');
     console.log(passage, line, note);
     set_focus({passage:passage,line:line,note:note});
-    set_focus_note(content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]);
     set_show_note_selector(true);
   }
 
@@ -145,12 +139,7 @@ export function SongScreen({route, navigation}) {
 							 add_line: add_line,
                edit_title: (id) => {edit_label(id)},
                edit: edit_note}));
-               //edit: (obj) => {edit_song(i,obj)}}));
 
-
-               //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
-
-               //content={content['passages'][focus.passage]['instruments'][0]['lines'][focus.line][focus.note]}
   return (
     <View>
       <Note_Selector change_note={change_note} content={content} focus={focus} visible={show_note_selector} close={close_modal}
