@@ -22,7 +22,7 @@ function Document(props){
       RNFS.readFile(props.path,'utf8')
         .then((contents) => {
           console.log(props.path);
-          let content = parse_song(contents);
+          let content = JSON.parse(contents);
           console.log(content);
           props.navigation.navigate('Song',{name:props.name, path:props.path, content:content});
         })

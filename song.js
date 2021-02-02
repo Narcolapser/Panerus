@@ -121,7 +121,7 @@ export function SongScreen({route, navigation}) {
     else {
       content['passages'][label_selector]['title'] = text;
     }
-    console.log(id);
+  
     console.log(text);
   }
 

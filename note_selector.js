@@ -64,7 +64,7 @@ export function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" >
-              <Text style={{ fontFamily: 'kepatihan' }} >{note.left} {note.right}</Text>
+              <Text style={{ fontFamily: 'kepatihan' }} >{note.left_diacritic}{note.left} {note.right_diacritic}{note.right}</Text>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>

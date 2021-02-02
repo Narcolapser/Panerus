@@ -29,7 +29,7 @@ export function Passage(props){
     <View style={{flex:1,width:"80%"}}>
       <EditableLabel content={props.title} edit={() => {props.edit_title(props.key)}} id='title'></EditableLabel>
       {lines}
-      <Button title="Add line" onPress={props.edit}><Icon name="plus-circle-outline"/></Button>
+      <Button title="Add line" onPress={addLine}><Icon name="plus-circle-outline"/></Button>
       <Text></Text>
     </View>
     )

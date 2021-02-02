@@ -169,7 +169,8 @@ export function save_song(song)
 {
   requestExternalWrite()
   let path = RNFS.DocumentDirectoryPath + '/' + song['title'] + '.pan';
-  RNFS.writeFile(path,compile_song(song))
+  //RNFS.writeFile(path,compile_song(song))
+  RNFS.writeFile(path,JSON.stringify(song))
     .then((success) => {
       alert(song['title'] + ' was saved succesfully');
     })
