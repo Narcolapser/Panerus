@@ -26,7 +26,7 @@ export const requestExternalWrite = async () => {
 };
 
 var json_layout = `{
-	"title":"Song name",
+	"title":"title",
 	"passages":[
 		{
 			"title":"passage title",
@@ -101,10 +101,44 @@ export function save_song(song)
 }
 
 
-export let new_song = `#  Title
+// export let new_song = `#  Title
+//
+// ## Buka
+// · · · ·	· · · ·	· · · ·	· · · ·`
 
-## Buka
-· · · ·	· · · ·	· · · ·	· · · ·`
+export let new_song = `{
+	"title":"title",
+	"passages":[
+		{
+			"title":"passage title",
+			"instruments":[
+				{
+					"instrument":"instrument name",
+					"lines":[
+						[
+							[{"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""},
+               {"left": "·", "left_diacritic": "", "right": "", "right_diacritic": ""}]
+						]
+					]
+				}
+			]
+		}
+	]
+}`
+
 
 var example = `# Asmaradana
 
