@@ -26,8 +26,15 @@ var example = `# Asmaradana
 
 let loading = '# loading'
 
-//let defaultLine = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
-let defaultLine = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3","2","1"]];
+//let default_line = '1 2 3 4\t1 2 3 4\t1 2 3 4\t1 2 3 4';
+//let default_line = [["4","3","2","1"],["4","3","2","1"],["4","3","2","1"],["4","3","2","1"]];
+let default_note = {left_diacritic:'',left:'·',right_diacritic:'',right:''}
+let default_line = [default_note, default_note, default_note, default_note,
+                   default_note, default_note, default_note, default_note,
+                   default_note, default_note, default_note, default_note,
+                   default_note, default_note, default_note, default_note];
+
+function copy(value) { return JSON.parse(JSON.stringify(value)); }
 
 export function SongScreen({route, navigation}) {
   const { path } = route.params;
@@ -60,15 +67,15 @@ export function SongScreen({route, navigation}) {
   }
 
   let add_passage = () => {
-    let new_content = JSON.parse(JSON.stringify(content));
-    new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:[defaultLine]}]});
+    let new_content = copy(content);
+    new_content['passages'].push({title:'new passage',instruments:[{instrument:'',lines:[copy(default_line)]}]});
     setContent(new_content);
   }
 
 	let add_line = (passage) => {
-		let new_content = JSON.parse(JSON.stringify(content));
+		let new_content = copy(content);
 		for(let i = 0; i < new_content['passages'][passage]['instruments'].length; i ++)
-			new_content['passages'][passage]['instruments'][i]['lines'].push(defaultLine);
+			new_content['passages'][passage]['instruments'][i]['lines'].push(copy(default_line));
 		setContent(new_content);
 	}
 
@@ -121,7 +128,7 @@ export function SongScreen({route, navigation}) {
     else {
       content['passages'][label_selector]['title'] = text;
     }
-  
+
     console.log(text);
   }
 
@@ -141,17 +148,17 @@ export function SongScreen({route, navigation}) {
                edit: edit_note}));
 
   return (
-    <View>
+    <View style={{ flex: 1}}>
       <Note_Selector change_note={change_note} content={content} focus={focus} visible={show_note_selector} close={close_modal}
       ></Note_Selector>
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
-			<View style={{flexDirection: 'row'}}>
+			<View style={{flexGrow: 0, flexBasis: 'auto', flexDirection: 'row'}}>
 				<Button title="Save" onPress={() => {save_song(content)}}></Button>
 				<Button title="Preview"></Button>
 				<Button title="Export" onPress={() => {export_song(content)}}></Button>
 				<Button title="Delete" onPress={delete_file}></Button>
 			</View>
-      <View style={{width:"100%"}}>
+      <View style={{flex: 1, width:"100%"}}>
         <ScrollView style={{width:"100%"}}>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <View>

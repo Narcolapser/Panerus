@@ -25,67 +25,6 @@ export const requestExternalWrite = async () => {
   }
 };
 
-
-export function parse_song(str)
-{
-  while (str.includes('\t'))
-    str = str.replace('\t',' ')
-
-  let parts = str.split('##');
-  let title = parts.splice(0,1)[0].substring(1);
-  while (title[0] == ' ')
-    title = title.substring(1);
-  while(title.includes('\n'))
-    title = title.replace('\n','');
-  let passages = [];
-  for(let i = 0; i < parts.length; i++)
-  {
-    let passage_parts = parts[i].split('\n');
-    let passage_title = passage_parts.splice(0,1)[0];
-    while (passage_title[0] == ' ')
-      passage_title = passage_title.substring(1);
-    let instrument = '';
-    let instruments = [];
-    let lines = [];
-    for(let j = 0; j < passage_parts.length; j++)
-    {
-      if (passage_parts[j].includes('###'))
-      {// Start of a new  instrument.
-        if (instrument != '')
-        {
-          instruments.push({instrument:instrument,lines:lines})
-          lines = [];
-        }
-        instrument = passage_parts[j];
-      }
-      else if (passage_parts[j].includes(' '))// may be a line of music
-      {
-        let raw_notes = (passage_parts[j]).split(' ');
-        let notes = [];
-        for(let i = 0; i< raw_notes.length; i++)
-        {
-          let left = '';
-          let right = '';
-          if(raw_notes[i].length == 1)
-            left = raw_notes[i]
-          else {
-            left = raw_notes[i][0]
-            right = raw_notes[i][1]
-          }
-          notes.push({left:left,right:right,left_diacritic:'',right_diacritic:''});
-        }
-        if (notes.length >= 16)
-          lines.push(notes);
-      }
-      // No else, if it is not a instrument or a line it's a blank line.
-    }
-    instruments.push({instrument:instrument,lines:lines});
-    passages.push({title: passage_title, instruments:instruments});
-  }
-  console.log({passages:passages,title:title});
-  return {passages:passages,title:title};
-}
-
 var json_layout = `{
 	"title":"Song name",
 	"passages":[
@@ -104,23 +43,6 @@ var json_layout = `{
 		}
 	]
 }`
-
-export function compile_song(song)
-{
-  let outs = '# ' + song['title'] + '\n\n';
-  for(let p = 0; p < song['passages'].length; p++)
-  {
-    outs += '## ' + song['passages'][p]['title'] + '\n';
-    for (let l = 0; l < song['passages'][p]['instruments'][0]['lines'].length; l++)
-    {
-      let line = song['passages'][p]['instruments'][0]['lines'][l];
-      outs += line.join(' ')
-      outs += '\n';
-    }
-    outs += '\n';
-  }
-  return outs;
-}
 
 export async function export_song(song)
 {
@@ -169,7 +91,6 @@ export function save_song(song)
 {
   requestExternalWrite()
   let path = RNFS.DocumentDirectoryPath + '/' + song['title'] + '.pan';
-  //RNFS.writeFile(path,compile_song(song))
   RNFS.writeFile(path,JSON.stringify(song))
     .then((success) => {
       alert(song['title'] + ' was saved succesfully');
