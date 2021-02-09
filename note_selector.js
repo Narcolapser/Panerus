@@ -36,7 +36,7 @@ export function Note_Selector(props)
   for(let i = 0; i < notes.length; i++)
     right_buttons.push(<Button title={notes[i]} style={styles.button} onPress={() => update_note('right',notes[i])}/>)
 
-  let diacritics = ['','g','n','p','j'];
+  let diacritics = ['','g','n','p','j','b'];
   let ldb = [];
   for(let i = 0; i < diacritics.length; i++)
     ldb.push(<Selector_Button title={' '+diacritics[i] + note.left + ' '} style={styles.button}
@@ -46,8 +46,23 @@ export function Note_Selector(props)
     rdb.push(<Selector_Button title={diacritics[i] + note.right} style={styles.button}
       onPress={() => update_note('right_diacritic',diacritics[i])}/>)
 
-  let upper_octave = {1:'!',2:'@',3:'#',4:'$',5:'%',6:'^',7:'&'};
-  let lower_octave = {1:'q',2:'w',3:'e',4:'r',5:'t',6:'y',7:'u'};
+  let upper_octave = {'1':'!','2':'@','3':'#','4':'$','5':'%','6':'^','7':'&'};
+  let lower_octave = {'1':'q','2':'w','3':'e','4':'r','5':'t','6':'y','7':'u'};
+
+  let map_back = {'!':'1','@':'2','#':'3','$':'4','%':'5','^':'6','&':'7',
+                  'q':'1','w':'2','e':'3','r':'4','t':'5','y':'6','u':'7',
+                  '1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7'};
+
+  let left_value = map_back[note.left];
+  let right_value = map_back[note.right];
+
+  let left_up_octave_button = <Selector_Button title={upper_octave[left_value]} style={styles.button}/>
+  let left_no_octave_button = <Selector_Button title={left_value} style={styles.button}/>
+  let left_down_octave_button = <Selector_Button title={lower_octave[left_value]} style={styles.button}/>
+  let right_up_octave_button = <Selector_Button title={upper_octave[right_value]} style={styles.button}/>
+  let right_no_octave_button = <Selector_Button title={right_value} style={styles.button}/>
+  let right_down_octave_button = <Selector_Button title={lower_octave[right_value]} style={styles.button}/>
+
 
   console.log('content')
   console.log(note);
@@ -66,16 +81,23 @@ export function Note_Selector(props)
             { ldb }
           </View>
           <View id="center_display" style={styles.center_display}>
-            <View id="note_display" >
+            <View id="note_display" style={styles.note_display}>
               <Text style={{ fontFamily: 'kepatihan' }} >{note.left_diacritic}{note.left} {note.right_diacritic}{note.right}</Text>
+            </View>
+            <View style={styles.container}>
+              <View id="note_display"  style={styles.center_display} >
+                  {left_up_octave_button}
+                  {left_no_octave_button}
+                  {left_down_octave_button}
+              </View>
+              <View id="note_display"  style={styles.center_display} >
+                  {right_up_octave_button}
+                  {right_no_octave_button}
+                  {right_down_octave_button}
+              </View>
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>
-            </View>
-            <View>
-              <Text style={{ fontFamily: 'kepatihan' }} >!@#$%^&</Text>
-              <Text style={{ fontFamily: 'kepatihan' }} >1234567</Text>
-              <Text style={{ fontFamily: 'kepatihan' }} >qwertyu</Text>
             </View>
           </View>
           <View id="right_selectors" style={styles.selector}>
@@ -103,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 2
   },
   note_display: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'center',
     flexDirection:'row',
     flexWrap:'wrap',
