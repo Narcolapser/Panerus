@@ -36,15 +36,18 @@ export function Note_Selector(props)
   for(let i = 0; i < notes.length; i++)
     right_buttons.push(<Button title={notes[i]} style={styles.button} onPress={() => update_note('right',notes[i])}/>)
 
-  let diacritics = ['','g','n','8'];
+  let diacritics = ['','g','n','p','j'];
   let ldb = [];
   for(let i = 0; i < diacritics.length; i++)
-    ldb.push(<Selector_Button title={diacritics[i] + note.left} style={styles.button}
+    ldb.push(<Selector_Button title={' '+diacritics[i] + note.left + ' '} style={styles.button}
       onPress={() => update_note('left_diacritic',diacritics[i])}/>)
   let rdb = [];
   for(let i = 0; i < diacritics.length; i++)
     rdb.push(<Selector_Button title={diacritics[i] + note.right} style={styles.button}
       onPress={() => update_note('right_diacritic',diacritics[i])}/>)
+
+  let upper_octave = {1:'!',2:'@',3:'#',4:'$',5:'%',6:'^',7:'&'};
+  let lower_octave = {1:'q',2:'w',3:'e',4:'r',5:'t',6:'y',7:'u'};
 
   console.log('content')
   console.log(note);
@@ -68,6 +71,11 @@ export function Note_Selector(props)
             </View>
             <View id="note_display" >
               <Button title="Done" onPress={props.close} style={styles.button}/>
+            </View>
+            <View>
+              <Text style={{ fontFamily: 'kepatihan' }} >!@#$%^&</Text>
+              <Text style={{ fontFamily: 'kepatihan' }} >1234567</Text>
+              <Text style={{ fontFamily: 'kepatihan' }} >qwertyu</Text>
             </View>
           </View>
           <View id="right_selectors" style={styles.selector}>
