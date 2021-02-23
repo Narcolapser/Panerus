@@ -7,6 +7,110 @@
         {
             "author": "Toben Archer",
             "branch": "master",
+            "date": "2021-02-08",
+            "message": "They aren't wired up yet, but I've got the octave buttons created. With that I've got all the diacritical marking buttons made. So next week my objective will be to wire the buttons up so that they can actually change the value of the note. Which, that's an important note, the value of the note, not of the diacritical marking, is what is changing. I also need to do some work on the formating. The flex box distribution of the note preview and the octave buttons is even. I'd really like to blow up the font size of the preview. If I did that would take the extra space that the preview is currently being given and make it make sense. ",
+            "project": "panerus",
+            "title": "Diacritical marking buttons done"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-02-08",
+            "message": "So the octave notations are not done via diacritical markings, rather qwerty, 1234567, and !@#$%^& are used for lower octave, no octave, and upper octave respectively. This is an interesting approach to say the least. But I get where they are coming from. Fortunately I was already aware I was going to need to do something seperate for the octaves, and now I have some idea of what. I'll save that for the next commit.\n\nI think I've got all the diacritical markings now though. At least all that I can see from the sample song Debbie sent me. ",
+            "project": "panerus",
+            "title": "Octaves are going to be fun."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-02-01",
+            "message": "Missed one of the other new buttons. It has a bunch of stuff that it shouldn't need but does for some reason. I'll sort that out later, for now I'm happy to have it working.\n\nI have transcribed most of Asmaradana in the editor. Which is great, but now, note for me of next week, a few diacritical markings that are missing:\n\nDownward swoop Over head slash Single Dot under Single dot over\n\nthe dots over and under also need to be combined with the other diacritical markings. ",
+            "project": "panerus",
+            "title": "New song was broken"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-02-01",
+            "message": "Fixed the new line and new passage buttons. Everything seemed to be working great but then scrolling wasn't. I figured out that the problem was the box was to long and part of it was dropping off the bottom of the display. This is something that could have taken me hours, weeks, to solve but I managed to do it this evening between this commit and the last. Man I have gotten better at this. So the trick was flexGrow. I had to tell the button row to not grow but be a static size based on its content and then the scroll view would fill the remaining space. Worked perfectly, I was a little surprised. ",
+            "project": "panerus",
+            "title": "Layouts and lines"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-02-01",
+            "message": "Since I now use JSON for the structure of the song I can get away with just saving the json in it's native form. That makes the loading and saving of songs a lot less complicated, a welcome change. Not that it was necessary to much as I did abstract the saving and loading, I could still return to a plain text save option at some point in the future, but for now I'll enjoy the simplicity of just using JSON. ",
+            "project": "panerus",
+            "title": "Fixed saving and loading"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-25",
+            "message": "For some reason line 50 is still necessary. I can't fathom why. ",
+            "project": "panerus",
+            "title": "Well, I removed what I could."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-25",
+            "message": "Now I want to clean up some un-used code. ",
+            "project": "panerus",
+            "title": "Got selector working correctly."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-11",
+            "message": "When you click to edit a note it doesn't select the note you just selected it selects the previous note. I'm not sure why this is happening but it has happened to me before. I'm going to call it an evening here but note to me of next week: Look through the logs, find where I solved this last time and adapt it to the new structure of things. ",
+            "project": "panerus",
+            "title": "Temporal delays"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-11",
+            "message": "Note selector edits again. And boy does it do it much cleaner now. Next step, markings. ",
+            "project": "panerus",
+            "title": "Make noteselector select again"
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-11",
+            "message": "I'm starting to get the pieces to come back together. The note selector is not currently making any changes but it does now pop up like it is supposed to and display all the appropriate content. Huzzah! Now to get it to edit the content and then I'll come back and get those diacritical marking, the oh so important diacritical markings, back in. ",
+            "project": "panerus",
+            "title": "Note selector starting to come back."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-11",
+            "message": "I have moved the parsing of notes out of the lines file and into the pan_file.js file. So now dealing with serialization is left to just the pan_file functions to manage. ",
+            "project": "panerus",
+            "title": "Parsing removed from line."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-04",
+            "message": "These two (technically 3) objects now have their own javascript files. This should make maintainence easier. I didn't have time this week to progress the processing of the music files up into song or passage this week and out of line. I'm going to have to restructure that whole process and I want a whole evening to do it (take note me of next week). But overall I'm pleased with tonights progress. ",
+            "project": "panerus",
+            "title": "Moved passage and editable label out."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
+            "date": "2021-01-04",
+            "message": "I have decided to refactor the bubbling process for editing notes. I have tried passing up each progressive tier of the structure as the buble comes up but it was a little annoying to maintain. So the alternative is to make the notes aware of where they are in the structure. I have mixed feelings about this idea, but so far it appears to be a cleaner implementation than the other way around. But the cleaner implementation may simply be a better understanding of how it is all pieced together on my part. We'll see. ",
+            "project": "panerus",
+            "title": "Refactored bubbling."
+        },
+        {
+            "author": "Toben Archer",
+            "branch": "master",
             "date": "2020-09-21",
             "message": "I've begun a rather large refactor. This was brought about due to new information that has come from the change from unicode to the kepatihan font. Saddly my objective of having a plain save file won't be viable any more since I am not using unicode anymore. Unicode was one thing but g4 isn't going to make sense as a four with a cirlce around it. So I am refactoring with notes as objects instead of strings. This will make a lot of the logic around them much easier since I can address the parts and the diacritical markings directly.\n\nI've got a new note component completed and was working on updating line. I ran aground for a while trying to get the layout of the line to work since it isn't being forced from the bottom up anymore. Just got it's width set in the right spot and now it is time for bed. But I am glad to see some progress in a direction that should get me around my current blockers. ",
             "project": "panerus",

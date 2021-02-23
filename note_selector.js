@@ -56,12 +56,18 @@ export function Note_Selector(props)
   let left_value = map_back[note.left];
   let right_value = map_back[note.right];
 
-  let left_up_octave_button = <Selector_Button title={upper_octave[left_value]} style={styles.button}/>
-  let left_no_octave_button = <Selector_Button title={left_value} style={styles.button}/>
-  let left_down_octave_button = <Selector_Button title={lower_octave[left_value]} style={styles.button}/>
-  let right_up_octave_button = <Selector_Button title={upper_octave[right_value]} style={styles.button}/>
-  let right_no_octave_button = <Selector_Button title={right_value} style={styles.button}/>
-  let right_down_octave_button = <Selector_Button title={lower_octave[right_value]} style={styles.button}/>
+  let left_up_octave_button = <Selector_Button title={upper_octave[left_value]} style={styles.button}
+    onPress={() => update_note('left',upper_octave[left_value])}/>
+  let left_no_octave_button = <Selector_Button title={left_value} style={styles.button}
+    onPress={() => update_note('left',left_value)}/>
+  let left_down_octave_button = <Selector_Button title={lower_octave[left_value]} style={styles.button}
+    onPress={() => update_note('left',lower_octave[left_value])}/>
+  let right_up_octave_button = <Selector_Button title={upper_octave[right_value]} style={styles.button}
+    onPress={() => update_note('right',lower_octave[right_value])}/>
+  let right_no_octave_button = <Selector_Button title={right_value} style={styles.button}
+    onPress={() => update_note('right',right_value)}/>
+  let right_down_octave_button = <Selector_Button title={lower_octave[right_value]} style={styles.button}
+    onPress={() => update_note('right',lower_octave[right_value])}/>
 
 
   console.log('content')
