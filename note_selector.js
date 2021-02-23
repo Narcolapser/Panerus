@@ -88,7 +88,7 @@ export function Note_Selector(props)
           </View>
           <View id="center_display" style={styles.center_display}>
             <View id="note_display" style={styles.note_display}>
-              <Text style={{ fontFamily: 'kepatihan' }} >{note.left_diacritic}{note.left} {note.right_diacritic}{note.right}</Text>
+              <Text style={{ fontFamily: 'kepatihan', fontSize: 60}} >{note.left_diacritic}{note.left} {note.right_diacritic}{note.right}</Text>
             </View>
             <View style={styles.container}>
               <View id="note_display"  style={styles.center_display} >
