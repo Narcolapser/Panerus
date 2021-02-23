@@ -42,6 +42,11 @@ function Document(props){
 function HomeScreen({ navigation }) {
   const [doc_list, set_doc_list] = useState([]);
 
+  let file = (new_file) => {
+    let copy = JSON.parse(JSON.stringify(doc_list));
+    copy.push(new_file)
+    set_doc_list(copy);
+  }
   useEffect( () => {
     let RNFS = require('react-native-fs');
     results = RNFS.readDir(RNFS.DocumentDirectoryPath)
@@ -50,10 +55,23 @@ function HomeScreen({ navigation }) {
       for(let i = 0; i < result.length; i++)
       {
         if ((result[i]['path'].slice(-3) == 'pan'))
-          files.push(result[i]['path']);
+        {
+          RNFS.readFile(result[i]['path'],'utf8')
+            .then((contents) => {
+              console.log(result[i]['path']);
+              let content = JSON.parse(contents);
+              console.log(content);
+              files.push({'path':result[i]['path'],'content':content});
+            })
+            .catch((err) => {
+              console.log(err.message, err.code);
+            })
+
+        }
+
       }
       console.log(JSON.stringify(files));
-      set_doc_list(files);
+
     });
 
     }, [])
@@ -64,7 +82,10 @@ function HomeScreen({ navigation }) {
   docs.push(Document({name:plus_icon,navigation:navigation,path:false}));
 
   for(let i = 0; i < doc_list.length; i++)
-    docs.push(Document({name:doc_list[i],navigation:navigation,path:doc_list[i]}))
+  {
+    console.log(doc_list[i]);
+    docs.push(Document({name:doc_list[i]['content']['title'],navigation:navigation,path:doc_list[i]['path']}))
+  }
 
   return (
     <View style={styles.root}>
