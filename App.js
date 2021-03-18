@@ -61,7 +61,10 @@ function HomeScreen({ navigation }) {
               console.log(result[i]['path']);
               let content = JSON.parse(contents);
               console.log(content);
-              files.push({'path':result[i]['path'],'content':content});
+              let copy = JSON.parse(JSON.stringify(doc_list));
+              copy.push({'path':result[i]['path'],'content':content})
+              set_doc_list(copy);
+              console.log('Added ' + result[i]['path'] + ' to list of files.');
             })
             .catch((err) => {
               console.log(err.message, err.code);
@@ -81,6 +84,7 @@ function HomeScreen({ navigation }) {
   let plus_icon = <Icon name="plus-circle-outline"/>;
   docs.push(Document({name:plus_icon,navigation:navigation,path:false}));
 
+  console.log('There are ' + doc_list.length + ' documents');
   for(let i = 0; i < doc_list.length; i++)
   {
     console.log(doc_list[i]);
