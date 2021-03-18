@@ -67,15 +67,33 @@ export async function export_song(song)
 
 function render_song(song)
 {
+  console.log('song');
+  console.log(song);
   let passages = ''
   for (let p=0; p < song['passages'].length; p++)
   {
     let lines = song['passages'][p]['instruments'][0]['lines'];
+    console.log(`Lines for ${song['passages'][p]['title']}`);
+    console.log(lines)
     let str_lines = ''
     for (let l=0; l<lines.length; l++)
     {
+      // console.log('line');
+      // console.log(lines[l]);
       for (let n=0; n<16; n++)
-        str_lines += '<span style="min-width: 50px;">' + lines[l][n] + '</span>\n';
+      {
+        // console.log('note');
+        // console.log(lines[l][0][n]);
+        if (lines[l][n] === undefined)
+          continue
+          // str_lines += '<span style="min-width: 50px;">h</span>\n';
+        else
+        {
+          let note = lines[l][n].left_diacritic + lines[l][n].left;
+          note += lines[l][n].right_diacritic + lines[l][n].right;
+          str_lines += '<span style="min-width: 50px;">' + note + '</span>\n';
+        }
+      }
       str_lines += '<br/>';
     }
     str_lines = str_lines.replace('\\"','\"');

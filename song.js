@@ -154,7 +154,6 @@ export function SongScreen({route, navigation}) {
       <Label_Editor update={update_label} close={close_label} visible={show_label_modal} content={label_value} id='Title'></Label_Editor>
 			<View style={{flexGrow: 0, flexBasis: 'auto', flexDirection: 'row'}}>
 				<Button title="Save" onPress={() => {save_song(content)}}></Button>
-				<Button title="Preview"></Button>
 				<Button title="Export" onPress={() => {export_song(content)}}></Button>
 				<Button title="Delete" onPress={delete_file}></Button>
 			</View>
