@@ -1,6 +1,7 @@
 import * as RNFS from 'react-native-fs';
 import { PermissionsAndroid } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 export const requestExternalWrite = async () => {
   try {
@@ -49,7 +50,8 @@ export async function export_song(song)
     let options = {
       html: render_song(song),
       fileName: song['title'],
-      directory: 'Documents'
+      directory: 'Documents',
+      fonts: [resolveAssetSource(require('assets/fonts/kepatihan.ttf')).uri]
     };
     console.log('creating pdf: ', options);
     console.log(RNHTMLtoPDF);
@@ -75,7 +77,7 @@ function render_song(song)
     let lines = song['passages'][p]['instruments'][0]['lines'];
     console.log(`Lines for ${song['passages'][p]['title']}`);
     console.log(lines)
-    let str_lines = ''
+    let str_lines = '<span style="font-family:kepatihan">'
     for (let l=0; l<lines.length; l++)
     {
       // console.log('line');
@@ -94,9 +96,9 @@ function render_song(song)
           str_lines += '<span style="min-width: 50px;">' + note + '</span>\n';
         }
       }
-      str_lines += '<br/>';
+      str_lines += '</span><br/>';
     }
-    str_lines = str_lines.replace('\\"','\"');
+    //str_lines = str_lines.replace('\\"','\"');
     passages += `<h3>${song['passages'][p]['title']}</h3><br/>${str_lines}<br/>`
 
   }
